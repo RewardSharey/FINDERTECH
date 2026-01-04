@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDERTECH | Admin Transaksi</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --secondary: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-border: #E0E0E0;
+            --gray-text: #616161;
+            --black: #212121;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: var(--gray-light);
+            color: var(--black);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+
+        /* HEADER */
+        .admin-header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-border);
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .logo {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .brand-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .admin-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* NAVIGATION */
+        .admin-nav {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-border);
+            padding: 0 20px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            list-style: none;
+            gap: 2px;
+        }
+
+        .tab-btn {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-text);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 24px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* CARD */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .stats {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        .stat-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .stat-pending {
+            background: rgba(249, 168, 37, 0.1);
+            color: var(--warning);
+        }
+
+        .stat-success {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+
+        .stat-reject {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--error);
+        }
+
+        /* TABLE */
+        .table-container {
+            overflow-x: auto;
+            padding: 0 20px 20px;
+        }
+
+        .transactions-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        .transactions-table th {
+            padding: 16px 12px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        .transactions-table td {
+            padding: 16px 12px;
+            border-bottom: 1px solid var(--gray-border);
+            vertical-align: middle;
+        }
+
+        .transactions-table tbody tr {
+            transition: var(--transition);
+        }
+
+        .transactions-table tbody tr:hover {
+            background: rgba(30, 136, 229, 0.02);
+        }
+
+        .transactions-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* USER INFO */
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-email {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        .user-date {
+            font-size: 12px;
+            color: var(--gray-text);
+        }
+
+        /* AMOUNT */
+        .amount {
+            font-weight: 600;
+            font-size: 16px;
+            color: var(--black);
+        }
+
+        /* STATUS BADGE */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: rgba(249, 168, 37, 0.1);
+            color: var(--warning);
+        }
+
+        .status-success {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+
+        .status-reject {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--error);
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn-acc {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-acc:hover {
+            background: #1b5e20;
+        }
+
+        .btn-reject {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-reject:hover {
+            background: #b71c1c;
+        }
+
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .empty-icon {
+            font-size: 48px;
+            color: var(--gray-border);
+            margin-bottom: 16px;
+        }
+
+        .empty-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--gray-text);
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* MODAL CONFIRMATION */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-text {
+            font-size: 14px;
+            color: var(--gray-text);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-details {
+            background: var(--gray-light);
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--gray-text);
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-size: 14px;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .modal-btn-secondary {
+            background: var(--gray-light);
+            color: var(--black);
+            border: 1px solid var(--gray-border);
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--black);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+            color: var(--black);
+        }
+
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--gray-border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .admin-header {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px;
+                text-align: center;
+            }
+            
+            .nav-tabs {
+                overflow-x: auto;
+                padding-bottom: 4px;
+            }
+            
+            .tab-btn {
+                padding: 12px 16px;
+                white-space: nowrap;
+            }
+            
+            .card-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+            
+            .table-container {
+                padding: 0 12px 12px;
+            }
+            
+            .transactions-table th,
+            .transactions-table td {
+                padding: 12px 8px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* UTILITY */
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="admin-header">
+        <a href="admin.html" class="brand">
+            <i class="fas fa-search logo"></i>
+            <span class="brand-text">FINDERTECH</span>
+        </a>
+        <div class="admin-badge">Admin Panel</div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="admin-nav">
+        <ul class="nav-tabs">
+            <li>
+                <a href="admin.html" class="tab-btn">
+                    <i class="fas fa-chart-bar"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <button class="tab-btn active" data-tab="deposit">
+                    <i class="fas fa-wallet"></i> Deposit
+                </button>
+            </li>
+            <li>
+                <button class="tab-btn" data-tab="withdraw">
+                    <i class="fas fa-money-bill-wave"></i> Withdraw
+                </button>
+            </li>
+            <li>
+                <a href="admin-user.html" class="tab-btn">
+                    <i class="fas fa-users"></i> User Management
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Deposit Tab -->
+        <div class="tab-content active" id="depositTab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Deposit Pending</h2>
+                    <div class="stats">
+                        <span class="stat-badge stat-pending" id="pendingDepositCount">0 pending</span>
+                        <span class="stat-badge stat-success" id="successDepositCount">0 success</span>
+                        <span class="stat-badge stat-reject" id="rejectDepositCount">0 reject</span>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="transactions-table" id="depositTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Nominal</th>
+                                <th>Metode</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="depositTableBody">
+                            <!-- Deposit data will be loaded here -->
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <p class="loading-text">Memuat data deposit...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdraw Tab -->
+        <div class="tab-content" id="withdrawTab">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Withdraw Pending</h2>
+                    <div class="stats">
+                        <span class="stat-badge stat-pending" id="pendingWithdrawCount">0 pending</span>
+                        <span class="stat-badge stat-success" id="successWithdrawCount">0 success</span>
+                        <span class="stat-badge stat-reject" id="rejectWithdrawCount">0 reject</span>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <table class="transactions-table" id="withdrawTable">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Nominal</th>
+                                <th>Bank / E-Wallet</th>
+                                <th>Status</th>
+                                <th>Tanggal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="withdrawTableBody">
+                            <!-- Withdraw data will be loaded here -->
+                            <tr>
+                                <td colspan="6" class="loading">
+                                    <div class="loading-spinner"></div>
+                                    <p class="loading-text">Memuat data withdraw...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Confirmation Modal -->
+    <div class="modal-overlay" id="confirmationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle">Konfirmasi</div>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <p class="modal-text" id="modalText">Apakah Anda yakin ingin melanjutkan aksi ini?</p>
+                
+                <div class="modal-details" id="modalDetails">
+                    <!-- Details will be inserted here -->
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-primary" id="confirmBtn">
+                    KONFIRMASI
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            query, 
+            where, 
+            orderBy, 
+            onSnapshot,
+            getDocs,
+            updateDoc,
+            doc,
+            increment,
+            addDoc,
+            serverTimestamp,
+            getDoc,
+            runTransaction
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4EV4ywK6YZZgyBXVWSdic6l9tpzzzHpk",
+            authDomain: "findertech.firebaseapp.com",
+            projectId: "findertech",
+            storageBucket: "findertech.firebasestorage.app",
+            messagingSenderId: "510956153810",
+            appId: "1:510956153810:web:0aac2328ee61355569f60b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const confirmationModal = document.getElementById('confirmationModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const confirmBtn = document.getElementById('confirmBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalText = document.getElementById('modalText');
+        const modalDetails = document.getElementById('modalDetails');
+        const toastEl = document.getElementById('toast');
+
+        // State variables
+        let currentAdmin = null;
+        let pendingAction = null;
+        let currentTransaction = null;
+        let transactionType = null;
+
+        // Toast Notification
+        function showToast(message, type = 'default', duration = 3000) {
+            toastEl.textContent = message;
+            toastEl.className = 'toast';
+            
+            if (type !== 'default') {
+                toastEl.classList.add(type);
+            }
+            
+            toastEl.classList.add('show');
+            
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, duration);
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp || !timestamp.toDate) return '-';
+            const date = timestamp.toDate();
+            return date.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Get user data
+        async function getUserData(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', uid));
+                if (userDoc.exists()) {
+                    return userDoc.data();
+                }
+                return null;
+            } catch (error) {
+                console.error('Error getting user data:', error);
+                return null;
+            }
+        }
+
+        // Get user saldo
+        async function getUserSaldo(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    return userData.saldo || 0;
+                }
+                return 0;
+            } catch (error) {
+                console.error('Error getting user saldo:', error);
+                return 0;
+            }
+        }
+
+        // Check admin access
+        async function checkAdminAccess(user) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    return userData.role === 'admin' && userData.status === 'active';
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking admin access:', error);
+                return false;
+            }
+        }
+
+        // Load deposit transactions
+        function loadDepositTransactions() {
+            const depositTableBody = document.getElementById('depositTableBody');
+            const pendingCount = document.getElementById('pendingDepositCount');
+            const successCount = document.getElementById('successDepositCount');
+            const rejectCount = document.getElementById('rejectDepositCount');
+            
+            let pending = 0, success = 0, reject = 0;
+            
+            // Query for pending deposits
+            const depositQuery = query(
+                collection(db, 'deposits'),
+                orderBy('createdAt', 'desc')
+            );
+            
+            onSnapshot(depositQuery, async (snapshot) => {
+                depositTableBody.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    depositTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+                                <h3 class="empty-title">Belum ada deposit</h3>
+                                <p class="empty-text">Tidak ada transaksi deposit yang ditemukan</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // Reset counters
+                pending = 0;
+                success = 0;
+                reject = 0;
+                
+                // Process each deposit
+                for (const docItem of snapshot.docs) {
+                    const deposit = docItem.data();
+                    const status = deposit.status || 'pending';
+                    
+                    // Update counters
+                    if (status === 'pending') pending++;
+                    else if (status === 'success') success++;
+                    else if (status === 'reject') reject++;
+                    
+                    // Get user data
+                    const userData = await getUserData(deposit.uid);
+                    const email = userData?.email || 'Unknown';
+                    const displayName = email.split('@')[0];
+                    
+                    // Create row
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    ${displayName.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="user-details">
+                                    <div class="user-email">${email}</div>
+                                    <div class="user-date">${formatDate(deposit.createdAt)}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount">${formatCurrency(deposit.amount || 0)}</div>
+                        </td>
+                        <td>${deposit.method || 'QRIS'}</td>
+                        <td>
+                            <span class="status-badge status-${status}">
+                                ${status.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>${formatDate(deposit.createdAt)}</td>
+                        <td>
+                            <div class="action-buttons">
+                                ${status === 'pending' ? `
+                                    <button class="action-btn btn-acc" data-id="${docItem.id}" data-action="approve">
+                                        <i class="fas fa-check"></i> ACC
+                                    </button>
+                                    <button class="action-btn btn-reject" data-id="${docItem.id}" data-action="reject">
+                                        <i class="fas fa-times"></i> REJECT
+                                    </button>
+                                ` : '<span class="status-text">Selesai</span>'}
+                            </div>
+                        </td>
+                    `;
+                    
+                    depositTableBody.appendChild(row);
+                    
+                    // Add event listeners for action buttons
+                    if (status === 'pending') {
+                        const accBtn = row.querySelector('.btn-acc');
+                        const rejectBtn = row.querySelector('.btn-reject');
+                        
+                        accBtn.addEventListener('click', () => {
+                            showConfirmationModal(
+                                'Konfirmasi Approve Deposit',
+                                'Apakah Anda yakin ingin menyetujui deposit ini?',
+                                {
+                                    'User': email,
+                                    'Nominal': formatCurrency(deposit.amount || 0),
+                                    'Metode': deposit.method || 'QRIS',
+                                    'Tanggal': formatDate(deposit.createdAt)
+                                },
+                                'approve',
+                                'deposit',
+                                docItem.id,
+                                deposit
+                            );
+                        });
+                        
+                        rejectBtn.addEventListener('click', () => {
+                            showConfirmationModal(
+                                'Konfirmasi Reject Deposit',
+                                'Apakah Anda yakin ingin menolak deposit ini?',
+                                {
+                                    'User': email,
+                                    'Nominal': formatCurrency(deposit.amount || 0),
+                                    'Metode': deposit.method || 'QRIS',
+                                    'Tanggal': formatDate(deposit.createdAt)
+                                },
+                                'reject',
+                                'deposit',
+                                docItem.id,
+                                deposit
+                            );
+                        });
+                    }
+                }
+                
+                // Update counters
+                pendingCount.textContent = `${pending} pending`;
+                successCount.textContent = `${success} success`;
+                rejectCount.textContent = `${reject} reject`;
+                
+            }, (error) => {
+                console.error('Error loading deposits:', error);
+                depositTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="empty-title">Gagal memuat data</h3>
+                            <p class="empty-text">Terjadi kesalahan saat memuat data deposit</p>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Load withdraw transactions
+        function loadWithdrawTransactions() {
+            const withdrawTableBody = document.getElementById('withdrawTableBody');
+            const pendingCount = document.getElementById('pendingWithdrawCount');
+            const successCount = document.getElementById('successWithdrawCount');
+            const rejectCount = document.getElementById('rejectWithdrawCount');
+            
+            let pending = 0, success = 0, reject = 0;
+            
+            // Query for withdraws
+            const withdrawQuery = query(
+                collection(db, 'withdraws'),
+                orderBy('createdAt', 'desc')
+            );
+            
+            onSnapshot(withdrawQuery, async (snapshot) => {
+                withdrawTableBody.innerHTML = '';
+                
+                if (snapshot.empty) {
+                    withdrawTableBody.innerHTML = `
+                        <tr>
+                            <td colspan="6" class="empty-state">
+                                <div class="empty-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <h3 class="empty-title">Belum ada withdraw</h3>
+                                <p class="empty-text">Tidak ada transaksi withdraw yang ditemukan</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // Reset counters
+                pending = 0;
+                success = 0;
+                reject = 0;
+                
+                // Process each withdraw
+                for (const docItem of snapshot.docs) {
+                    const withdraw = docItem.data();
+                    const status = withdraw.status || 'pending';
+                    
+                    // Update counters
+                    if (status === 'pending') pending++;
+                    else if (status === 'success') success++;
+                    else if (status === 'reject') reject++;
+                    
+                    // Get user data
+                    const userData = await getUserData(withdraw.uid);
+                    const email = userData?.email || 'Unknown';
+                    const displayName = email.split('@')[0];
+                    
+                        // Create row
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">
+                                    ${displayName.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="user-details">
+                                    <div class="user-email">${email}</div>
+                                    <div class="user-date">${formatDate(withdraw.createdAt)}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="amount">${formatCurrency(withdraw.amount || 0)}</div>
+                        </td>
+                        <td>${withdraw.bankName || 'Unknown'} - ${withdraw.accountNumber || ''}</td>
+                        <td>
+                            <span class="status-badge status-${status}">
+                                ${status.toUpperCase()}
+                            </span>
+                        </td>
+                        <td>${formatDate(withdraw.createdAt)}</td>
+                        <td>
+                            <div class="action-buttons">
+                                ${status === 'pending' ? `
+                                    <button class="action-btn btn-acc" data-id="${docItem.id}" data-action="approve">
+                                        <i class="fas fa-check"></i> ACC
+                                    </button>
+                                    <button class="action-btn btn-reject" data-id="${docItem.id}" data-action="reject">
+                                        <i class="fas fa-times"></i> REJECT
+                                    </button>
+                                ` : '<span class="status-text">Selesai</span>'}
+                            </div>
+                        </td>
+                    `;
+                    
+                    withdrawTableBody.appendChild(row);
+                    
+                    // Add event listeners for action buttons
+                    if (status === 'pending') {
+                        const accBtn = row.querySelector('.btn-acc');
+                        const rejectBtn = row.querySelector('.btn-reject');
+                        
+                        accBtn.addEventListener('click', () => {
+                            showConfirmationModal(
+                                'Konfirmasi Approve Withdraw',
+                                'Apakah Anda yakin ingin menyetujui withdraw ini?',
+                                {
+                                    'User': email,
+                                    'Nominal': formatCurrency(withdraw.amount || 0),
+                                    'Bank': withdraw.bankName || 'Unknown',
+                                    'No. Rekening': withdraw.accountNumber || '',
+                                    'Tanggal': formatDate(withdraw.createdAt)
+                                },
+                                'approve',
+                                'withdraw',
+                                docItem.id,
+                                withdraw
+                            );
+                        });
+                        
+                        rejectBtn.addEventListener('click', () => {
+                            showConfirmationModal(
+                                'Konfirmasi Reject Withdraw',
+                                'Apakah Anda yakin ingin menolak withdraw ini?',
+                                {
+                                    'User': email,
+                                    'Nominal': formatCurrency(withdraw.amount || 0),
+                                    'Bank': withdraw.bankName || 'Unknown',
+                                    'No. Rekening': withdraw.accountNumber || '',
+                                    'Tanggal': formatDate(withdraw.createdAt)
+                                },
+                                'reject',
+                                'withdraw',
+                                docItem.id,
+                                withdraw
+                            );
+                        });
+                    }
+                }
+                
+                // Update counters
+                pendingCount.textContent = `${pending} pending`;
+                successCount.textContent = `${success} success`;
+                rejectCount.textContent = `${reject} reject`;
+                
+            }, (error) => {
+                console.error('Error loading withdraws:', error);
+                withdrawTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="empty-state">
+                            <div class="empty-icon">
+                                <i class="fas fa-exclamation-triangle"></i>
+                            </div>
+                            <h3 class="empty-title">Gagal memuat data</h3>
+                            <p class="empty-text">Terjadi kesalahan saat memuat data withdraw</p>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        // Show confirmation modal
+        function showConfirmationModal(title, text, details, action, type, transactionId, transactionData) {
+            modalTitle.textContent = title;
+            modalText.textContent = text;
+            
+            // Create details HTML
+            let detailsHTML = '';
+            for (const [key, value] of Object.entries(details)) {
+                detailsHTML += `
+                    <div class="detail-item">
+                        <span class="detail-label">${key}:</span>
+                        <span class="detail-value">${value}</span>
+                    </div>
+                `;
+            }
+            modalDetails.innerHTML = detailsHTML;
+            
+            // Set current transaction info
+            pendingAction = action;
+            transactionType = type;
+            currentTransaction = {
+                id: transactionId,
+                data: transactionData
+            };
+            
+            // Show modal
+            confirmationModal.classList.add('active');
+        }
+
+        // Hide confirmation modal
+        function hideConfirmationModal() {
+            confirmationModal.classList.remove('active');
+            pendingAction = null;
+            currentTransaction = null;
+            transactionType = null;
+        }
+
+        // LOGIC UTAMA: Process transaction action dengan TRANSACTION
+        async function processTransactionAction() {
+            if (!pendingAction || !currentTransaction || !transactionType) {
+                showToast('Aksi tidak valid', 'error');
+                return;
+            }
+            
+            try {
+                // Show loading
+                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> MEMPROSES...';
+                confirmBtn.disabled = true;
+                
+                const { id, data } = currentTransaction;
+                const newStatus = pendingAction === 'approve' ? 'success' : 'reject';
+                
+                if (transactionType === 'deposit') {
+                    // Update deposit status
+                    const depositRef = doc(db, 'deposits', id);
+                    await updateDoc(depositRef, {
+                        status: newStatus,
+                        updatedAt: serverTimestamp(),
+                        processedBy: currentAdmin.uid
+                    });
+                    
+                    // Jika approved, update user balance
+                    if (pendingAction === 'approve') {
+                        const userRef = doc(db, 'users', data.uid);
+                        await updateDoc(userRef, {
+                            saldo: increment(data.amount),
+                            totalDeposit: increment(data.amount)
+                        });
+                        
+                        // Record transaction
+                        await addDoc(collection(db, 'transactions'), {
+                            uid: data.uid,
+                            type: 'deposit_approved',
+                            amount: data.amount,
+                            note: 'Deposit approved by admin',
+                            adminId: currentAdmin.uid,
+                            createdAt: serverTimestamp()
+                        });
+                    }
+                    
+                    showToast(`Deposit ${pendingAction === 'approve' ? 'disetujui' : 'ditolak'}`, 'success');
+                    
+                } else if (transactionType === 'withdraw') {
+                    // LOGIC UTAMA: Menggunakan Transaction untuk konsistensi data
+                    await runTransaction(db, async (transaction) => {
+                        const userRef = doc(db, 'users', data.uid);
+                        const withdrawRef = doc(db, 'withdraws', id);
+                        
+                        // Get current user data
+                        const userDoc = await transaction.get(userRef);
+                        if (!userDoc.exists()) {
+                            throw new Error('User tidak ditemukan');
+                        }
+                        
+                        const userData = userDoc.data();
+                        const currentSaldo = userData.saldo || 0;
+                        const withdrawAmount = data.amount || 0;
+                        
+                        if (pendingAction === 'approve') {
+                            // Cek apakah saldo cukup
+                            if (currentSaldo < withdrawAmount) {
+                                throw new Error('Saldo user tidak mencukupi');
+                            }
+                            
+                            // Update withdraw status
+                            transaction.update(withdrawRef, {
+                                status: 'success',
+                                updatedAt: serverTimestamp(),
+                                processedBy: currentAdmin.uid
+                            });
+                            
+                            // Kurangi saldo user
+                            transaction.update(userRef, {
+                                saldo: increment(-withdrawAmount),
+                                totalWithdraw: increment(withdrawAmount)
+                            });
+                            
+                        } else if (pendingAction === 'reject') {
+                            // Update withdraw status menjadi reject
+                            transaction.update(withdrawRef, {
+                                status: 'reject',
+                                updatedAt: serverTimestamp(),
+                                processedBy: currentAdmin.uid
+                            });
+                            
+                            // KEMBALIKAN SALDO HANYA JIKA SALDO SUDAH DIKURANGI SEBELUMNYA
+                            // Di sini kita asumsikan saldo belum dikurangi saat withdraw dibuat
+                            // Jika sistem Anda mengurangi saldo saat withdraw dibuat, uncomment bagian ini:
+                            // transaction.update(userRef, {
+                            //     saldo: increment(withdrawAmount)
+                            // });
+                        }
+                    });
+                    
+                    // Buat record transaksi
+                    if (pendingAction === 'approve') {
+                        await addDoc(collection(db, 'transactions'), {
+                            uid: data.uid,
+                            type: 'withdraw_approved',
+                            amount: data.amount,
+                            note: 'Withdraw approved by admin',
+                            adminId: currentAdmin.uid,
+                            createdAt: serverTimestamp()
+                        });
+                    }
+                    
+                    showToast(`Withdraw ${pendingAction === 'approve' ? 'disetujui' : 'ditolak'}`, 'success');
+                }
+                
+                // Hide modal and reset state
+                hideConfirmationModal();
+                
+            } catch (error) {
+                console.error('Error processing transaction:', error);
+                
+                if (error.message === 'Saldo user tidak mencukupi') {
+                    showToast('Gagal: Saldo user tidak mencukupi untuk approve withdraw', 'error');
+                } else {
+                    showToast('Gagal memproses transaksi: ' + error.message, 'error');
+                }
+            } finally {
+                // Reset button
+                confirmBtn.innerHTML = 'KONFIRMASI';
+                confirmBtn.disabled = false;
+            }
+        }
+
+        // Tab switching
+        tabBtns.forEach(btn => {
+            if (btn.dataset.tab) {
+                btn.addEventListener('click', () => {
+                    // Remove active class from all tabs
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    btn.classList.add('active');
+                    const tabId = btn.dataset.tab + 'Tab';
+                    document.getElementById(tabId).classList.add('active');
+                });
+            }
+        });
+
+        // Modal event listeners
+        closeModalBtn.addEventListener('click', hideConfirmationModal);
+        cancelBtn.addEventListener('click', hideConfirmationModal);
+        confirmBtn.addEventListener('click', processTransactionAction);
+
+        // Close modal on overlay click
+        confirmationModal.addEventListener('click', (e) => {
+            if (e.target === confirmationModal) {
+                hideConfirmationModal();
+            }
+        });
+
+        // Initialize admin page
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const isAdmin = await checkAdminAccess(user);
+                
+                if (isAdmin) {
+                    currentAdmin = user;
+                    
+                    // Load transactions
+                    loadDepositTransactions();
+                    loadWithdrawTransactions();
+                    
+                } else {
+                    // Not an admin, redirect to dashboard
+                    showToast('Akses ditolak. Hanya admin yang dapat mengakses halaman ini.', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'dashboard.html';
+                    }, 2000);
+                }
+            } else {
+                // Not logged in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Prevent form submission
+        document.addEventListener('submit', (e) => e.preventDefault());
+
+    </script>
+</body>
+</html>

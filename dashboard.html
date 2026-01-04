@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - FINDERTECH</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --secondary: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-border: #E0E0E0;
+            --gray-text: #616161;
+            --black: #212121;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: var(--gray-light);
+            color: var(--black);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        /* ANIMATED BACKGROUND - COPY FROM login.html */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.03) 0%, rgba(13, 71, 161, 0.03) 100%);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+            background: var(--primary-dark);
+        }
+
+        .particle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 70%;
+            animation-delay: -15s;
+            background: var(--secondary);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
+            }
+        }
+
+        /* PAGE LOAD ANIMATION */
+        .page-content {
+            animation: pageFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes pageFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TOP NAVIGATION */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-border);
+            z-index: 100;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: navFadeDown 0.5s ease-out 0.2s forwards;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        @keyframes navFadeDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-left, .nav-right {
+            width: 40px;
+        }
+
+        .nav-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .brand i {
+            font-size: 20px;
+        }
+
+        .notification-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray-text);
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 4px;
+        }
+
+        .notification-btn:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: var(--error);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 80px 16px 90px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* WELCOME SECTION */
+        .welcome-section {
+            margin-bottom: 24px;
+            animation: fadeIn 0.6s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: var(--gray-text);
+            margin-bottom: 4px;
+        }
+
+        .username {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--black);
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            animation: cardSlideUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        @keyframes cardSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-1 {
+            animation-delay: 0.4s;
+        }
+
+        .card-2 {
+            animation-delay: 0.5s;
+        }
+
+        .card-3 {
+            animation-delay: 0.6s;
+        }
+
+        .card-4 {
+            animation-delay: 0.7s;
+        }
+
+        /* SALDO CARD */
+        .saldo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .saldo-label {
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        .saldo-icon {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .saldo-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .action-btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-deposit {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-deposit:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-withdraw {
+            background: var(--gray-light);
+            color: var(--primary);
+            border: 1px solid var(--gray-border);
+        }
+
+        .btn-withdraw:hover {
+            background: #e3f2fd;
+        }
+
+        /* REFERRAL INFO */
+        .referral-info {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            border-top: 1px solid var(--gray-border);
+        }
+
+        .referral-label {
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        .referral-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .referral-value i {
+            color: var(--primary);
+        }
+
+        /* LINK CARD */
+        .link-card .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--black);
+        }
+
+        .link-description {
+            font-size: 13px;
+            color: var(--gray-text);
+            margin-bottom: 16px;
+        }
+
+        .link-input-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .link-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--gray-border);
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .copy-btn {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .copy-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* HISTORY CARD */
+        .history-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .history-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .view-all {
+            font-size: 13px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-border);
+            animation: itemFadeIn 0.4s ease-out forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes itemFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .history-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .icon-deposit {
+            background: #e3f2fd;
+            color: var(--primary);
+        }
+
+        .icon-withdraw {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .icon-reward {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .icon-produk {
+            background: #fff3e0;
+            color: #f57c00;
+        }
+
+        .icon-referral {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .history-details {
+            flex: 1;
+        }
+
+        .history-description {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--black);
+            margin-bottom: 2px;
+        }
+
+        .history-date {
+            font-size: 12px;
+            color: var(--gray-text);
+        }
+
+        .history-amount {
+            font-weight: 600;
+            color: var(--black);
+        }
+        .amount-neutral {
+    color: var(--gray-text);
+    font-weight: 500;
+}
+        .amount-positive {
+            color: var(--success);
+        }
+
+        .amount-negative {
+            color: var(--error);
+        }
+
+        .empty-history {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-text);
+            font-size: 14px;
+        }
+
+        .empty-history i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            color: var(--gray-border);
+        }
+
+        /* BOTTOM NAVIGATION */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--gray-border);
+            z-index: 100;
+            padding: 12px 0;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            animation: navFadeUp 0.5s ease-out 0.3s forwards;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        @keyframes navFadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--gray-text);
+            transition: var(--transition);
+            padding: 4px 0;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        .nav-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-label {
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-icon {
+            position: relative;
+        }
+
+        .nav-item.active .nav-icon::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: var(--black);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* LOADING STATES */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        .skeleton-amount {
+            height: 40px;
+            width: 70%;
+            margin: 20px auto;
+        }
+
+        .skeleton-button {
+            height: 48px;
+            border-radius: 12px;
+        }
+
+        .skeleton-item {
+            height: 56px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 600px;
+                padding: 90px 24px 100px;
+            }
+            
+            .card {
+                padding: 24px;
+            }
+            
+            .saldo-amount {
+                font-size: 36px;
+            }
+            
+            .action-btn {
+                padding: 16px;
+                font-size: 15px;
+            }
+            
+            .bottom-nav {
+                padding: 14px 0;
+            }
+            
+            .nav-icon {
+                font-size: 22px;
+            }
+            
+            .nav-label {
+                font-size: 12px;
+            }
+        }
+
+        /* UTILITY CLASSES */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animated">
+        <div class="bg-gradient"></div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="notification-btn">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge"></span>
+            </button>
+        </div>
+        <div class="nav-center">
+            <a href="dashboard.html" class="brand">
+                <i class="fas fa-search"></i>
+                FINDERTECH
+            </a>
+        </div>
+        <div class="nav-right"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <!-- Welcome Section -->
+        <section class="welcome-section">
+            <div class="welcome-text">Welcome,</div>
+            <div class="username" id="username">Loading...</div>
+        </section>
+
+        <!-- Card 1: Saldo & Actions -->
+        <div class="card card-1">
+            <div class="saldo-header">
+                <div class="saldo-label">Saldo Anda</div>
+                <div class="saldo-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+            </div>
+            
+            <div class="saldo-amount" id="saldoAmount">Rp 0</div>
+            
+            <div class="action-buttons">
+                <button class="action-btn btn-deposit" id="depositBtn">
+                    <i class="fas fa-wallet"></i>
+                    Deposit
+                </button>
+                <button class="action-btn btn-withdraw" id="withdrawBtn">
+                    <i class="fas fa-money-bill-wave"></i>
+                    Withdraw
+                </button>
+            </div>
+            
+            <div class="referral-info">
+                <div class="referral-label">Total Refferal</div>
+                <div class="referral-value" id="referralCount">
+                    <i class="fas fa-users"></i>
+                    <span>0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Card 3: History -->
+        <div class="card card-3">
+            <div class="history-header">
+                <h3 class="history-title">History Terbaru</h3>
+                <a href="#" class="view-all">Lihat Semua</a>
+            </div>
+            
+            <div id="historyContent">
+                <!-- History items will be inserted here -->
+                <div class="empty-history">
+                    <i class="fas fa-clock"></i>
+                    <p>Belum ada riwayat</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="dashboard.html" class="nav-item active">
+            <i class="fas fa-home nav-icon"></i>
+            <span class="nav-label">Home</span>
+        </a>
+        <a href="produk.html" class="nav-item">
+            <i class="fas fa-box nav-icon"></i>
+            <span class="nav-label">Produk</span>
+        </a>
+        <a href="referral.html" class="nav-item">
+            <i class="fas fa-users nav-icon"></i>
+            <span class="nav-label">Refferal</span>
+        </a>
+        <a href="profil.html" class="nav-item">
+            <i class="fas fa-user nav-icon"></i>
+            <span class="nav-label">Profil</span>
+        </a>
+    </nav>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            collection, 
+            query, 
+            where, 
+            orderBy, 
+            limit, 
+            onSnapshot 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4EV4ywK6YZZgyBXVWSdic6l9tpzzzHpk",
+            authDomain: "findertech.firebaseapp.com",
+            projectId: "findertech",
+            storageBucket: "findertech.firebasestorage.app",
+            messagingSenderId: "510956153810",
+            appId: "1:510956153810:web:0aac2328ee61355569f60b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const usernameEl = document.getElementById('username');
+        const saldoAmountEl = document.getElementById('saldoAmount');
+        const referralCountEl = document.querySelector('#referralCount span');
+        const historyContentEl = document.getElementById('historyContent');
+        const depositBtn = document.getElementById('depositBtn');
+        const withdrawBtn = document.getElementById('withdrawBtn');        
+        const toastEl = document.getElementById('toast');
+
+        // Global Variables
+        let currentUser = null;
+        let userData = null;
+        
+
+        // Toast Notification Function
+        function showToast(message, duration = 3000) {
+            toastEl.textContent = message;
+            toastEl.classList.add('show');
+            
+            setTimeout(() => {
+                toastEl.classList.remove('show');
+            }, duration);
+        }
+
+        // Format Currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Format Date
+        function formatDate(date) {
+            const d = date.toDate();
+            return d.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: 'short',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        // Animate Counter
+        function animateCounter(element, targetValue, duration = 1000) {
+            const startValue = parseInt(element.textContent.replace(/\D/g, '')) || 0;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                
+                // Easing function
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * easeOut);
+                
+                element.textContent = formatCurrency(currentValue);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    element.textContent = formatCurrency(targetValue);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Load User Data
+        async function loadUserData(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', uid));
+                
+                if (userDoc.exists()) {
+                    userData = userDoc.data();
+                    
+                    // Update UI with user data
+                    usernameEl.textContent = userData.username || userData.email.split('@')[0];
+                    
+                    // Animate saldo counter
+                    animateCounter(saldoAmountEl, userData.saldo || 0);
+                    
+                    // Update referral count
+                    referralCountEl.textContent = userData.totalReferral || 0;
+                                                           
+                    // Load history
+                    loadHistory(uid);
+                } else {
+                    console.error('User document not found');
+                    showToast('Data pengguna tidak ditemukan', 3000);
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showToast('Gagal memuat data pengguna', 3000);
+            }
+        }
+
+                        // Load History
+        function loadHistory(uid) {
+            try {
+                const historyQuery = query(
+                    collection(db, 'transactions'),
+                    where('uid', '==', uid),
+                    orderBy('createdAt', 'desc'),
+                    limit(5)
+                );
+                
+                onSnapshot(historyQuery, (snapshot) => {
+                    if (snapshot.empty) {
+                        historyContentEl.innerHTML = `
+                            <div class="empty-history">
+                                <i class="fas fa-clock"></i>
+                                <p>Belum ada riwayat</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    let historyHTML = '<ul class="history-list">';
+                    
+                    snapshot.forEach((doc, index) => {
+                        const data = doc.data();
+                        let amount = data.amount || 0;
+                        const type = data.type || 'unknown';
+                        const date = data.createdAt ? formatDate(data.createdAt) : 'Tanggal tidak tersedia';
+                        const note = data.note || '';
+                        
+                        // Determine icon and color based on type
+                        let iconClass = '';
+                        let icon = '';
+                        let description = '';
+                        let amountClass = '';
+                        let sign = '';
+                        
+                        switch(type) {
+                            case 'deposit_approved':
+                                iconClass = 'icon-deposit';
+                                icon = 'fa-wallet';
+                                description = note || 'Deposit Berhasil';
+                                amountClass = 'amount-positive';
+                                sign = '+';
+                                break;
+                            case 'deposit_rejected':
+                                iconClass = 'icon-deposit';
+                                icon = 'fa-wallet';
+                                description = note || 'Deposit Ditolak';
+                                amountClass = 'amount-neutral';
+                                sign = '';
+                                amount = 0; // Tidak ada perubahan saldo
+                                break;
+                            case 'withdraw_approved':
+                                iconClass = 'icon-withdraw';
+                                icon = 'fa-money-bill-wave';
+                                description = note || 'Withdraw Berhasil';
+                                amountClass = 'amount-negative';
+                                sign = '-';
+                                break;
+                            case 'withdraw_rejected':
+                                iconClass = 'icon-withdraw';
+                                icon = 'fa-money-bill-wave';
+                                description = note || 'Withdraw Ditolak';
+                                amountClass = 'amount-neutral';
+                                sign = '';
+                                amount = 0; // Tidak ada perubahan saldo
+                                break;
+                            case 'produk_pembelian':
+                                iconClass = 'icon-produk';
+                                icon = 'fa-box';
+                                description = note || 'Beli Produk';
+                                amountClass = 'amount-negative';
+                                sign = '-';
+                                break;
+                            case 'reward_produk':
+                                iconClass = 'icon-reward';
+                                icon = 'fa-gift';
+                                description = note || 'Reward Produk';
+                                amountClass = 'amount-positive';
+                                sign = '+';
+                                break;
+                            case 'reward_harian':
+                                iconClass = 'icon-reward';
+                                icon = 'fa-gift';
+                                description = note || 'Reward Harian';
+                                amountClass = 'amount-positive';
+                                sign = '+';
+                                break;
+                     case 'refferal_bonus':
+                                iconClass = 'icon-referral';
+                                icon = 'fa-users';
+                                description = note || 'Bonus Refferal';
+                                amountClass = 'amount-positive';
+                                sign = '+';
+                                break;
+                            case 'task_completed':
+                                iconClass = 'icon-task';
+                                icon = 'fa-tasks';
+                                description = note || 'Task Selesai';
+                                amountClass = 'amount-positive';
+                                sign = '+';
+                                break;
+                            default:
+                                // Jika tidak dikenal, cek dari amount
+                                iconClass = 'icon-default';
+                                icon = 'fa-circle';
+                                description = note || 'Transaksi';
+                                if (amount > 0) {
+                                    amountClass = 'amount-positive';
+                                    sign = '+';
+                                } else if (amount < 0) {
+                                    amountClass = 'amount-negative';
+                                    sign = '-';
+                                    amount = Math.abs(amount); // Ambil nilai absolut
+                                } else {
+                                    amountClass = 'amount-neutral';
+                                    sign = '';
+                                }
+                        }
+                        
+                        // Add animation delay based on index
+                        const animationDelay = index * 0.1;
+                        
+                        // Format amount
+                        const formattedAmount = amount > 0 ? formatCurrency(amount) : '';
+                        
+                        historyHTML += `
+                            <li class="history-item" style="animation-delay: ${animationDelay}s">
+                                <div class="history-icon ${iconClass}">
+                                    <i class="fas ${icon}"></i>
+                                </div>
+                                <div class="history-details">
+                                    <div class="history-description">${description}</div>
+                                    <div class="history-date">${date}</div>
+                                </div>
+                                <div class="history-amount ${amountClass}">
+                                    ${sign}${formattedAmount}
+                                </div>
+                            </li>
+                        `;
+                    });
+                    
+                    historyHTML += '</ul>';
+                    historyContentEl.innerHTML = historyHTML;
+                    
+                }, (error) => {
+                    console.error('Error loading history:', error);
+                    historyContentEl.innerHTML = `
+                        <div class="empty-history">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <p>Gagal memuat riwayat</p>
+                        </div>
+                    `;
+                });
+                
+            } catch (error) {
+                console.error('Error setting up history listener:', error);
+            }
+        }
+        // Event Listeners
+        depositBtn.addEventListener('click', () => {
+            window.location.href = 'deposit.html';
+        });
+
+        withdrawBtn.addEventListener('click', () => {
+            window.location.href = 'withdraw.html';
+        });
+
+        
+
+        // Auth State Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadUserData(user.uid);
+            } else {
+                // User not logged in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Initialize animations with delays
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add staggered animation to history items when loaded
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.type === 'childList') {
+                        const items = document.querySelectorAll('.history-item');
+                        items.forEach((item, index) => {
+                            item.style.animationDelay = `${0.1 * index}s`;
+                        });
+                    }
+                });
+            });
+            
+            observer.observe(historyContentEl, { childList: true });
+        });
+
+    </script>
+</body>
+</html>

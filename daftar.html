@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar - FINDERTECH</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Poppins', sans-serif;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --primary-light: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --bg-light: #F5F7FA;
+            --border: #E0E0E0;
+            --text-gray: #616161;
+            --text-dark: #212121;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --transition: all 0.3s ease;
+            --transition-fast: all 0.2s ease;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #0D47A1, #1E88E5, #42A5F5, #90CAF9);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            position: relative;
+            overflow-x: hidden;
+            color: var(--text-dark);
+        }
+
+        /* ANIMATED BACKGROUND */
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* TEXTURE OVERLAY */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+                radial-gradient(circle at 50% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 20%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* FLOATING PARTICLES */
+        .particle {
+            position: fixed;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* MAIN CONTAINER */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* HEADER BRAND */
+        .header-brand {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: slideDown 0.6s ease-out 0.1s both;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .logo-icon {
+            font-size: 32px;
+            color: var(--white);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .logo-text {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--white);
+            letter-spacing: 1px;
+        }
+
+        .tagline {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 500;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        /* CARD FORM */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            padding: 32px;
+            width: 100%;
+            animation: slideUp 0.6s ease-out 0.3s both;
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* FORM STYLES */
+        .form-group {
+            margin-bottom: 24px;
+            position: relative;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 16px;
+            color: var(--text-gray);
+            z-index: 1;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            color: var(--text-dark);
+            background: var(--white);
+            transition: var(--transition-fast);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-gray);
+            opacity: 0.7;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 16px;
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .password-toggle:hover {
+            color: var(--primary);
+        }
+
+        .captcha-container {
+            background: var(--bg-light);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            text-align: center;
+            border: 2px solid var(--border);
+        }
+
+        .captcha-question {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+        }
+
+        .captcha-input {
+            width: 120px;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            color: var(--text-dark);
+            transition: var(--transition-fast);
+        }
+
+        .captcha-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        /* BUTTON */
+        .btn {
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+            margin-bottom: 24px;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-loading {
+            pointer-events: none;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s linear infinite;
+        }
+
+        /* LINK */
+        .link-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .link-text {
+            color: var(--text-gray);
+            font-size: 14px;
+        }
+
+        .link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition-fast);
+        }
+
+        .link:hover {
+            color: var(--primary-dark);
+            text-decoration: underline;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            right: 24px;
+            z-index: 1000;
+            max-width: 400px;
+        }
+
+        .toast {
+            background: var(--white);
+            border-radius: var(--radius-md);
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.3s ease-out;
+            transition: var(--transition);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error);
+        }
+
+        .toast-icon {
+            font-size: 20px;
+        }
+
+        .toast.success .toast-icon {
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            color: var(--error);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .toast-message {
+            font-size: 13px;
+            color: var(--text-gray);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: var(--text-gray);
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px;
+            transition: var(--transition-fast);
+        }
+
+        .toast-close:hover {
+            color: var(--text-dark);
+        }
+
+        /* ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideDown {
+            from { 
+                opacity: 0; 
+                transform: translateY(-20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0; 
+                transform: translateY(20px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0); 
+            }
+        }
+
+        @keyframes slideInRight {
+            from { 
+                opacity: 0; 
+                transform: translateX(30px); 
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0); 
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 576px) {
+            .container {
+                padding: 16px;
+            }
+            
+            .card {
+                padding: 24px;
+            }
+            
+            .logo-text {
+                font-size: 24px;
+            }
+            
+            .logo-icon {
+                font-size: 28px;
+            }
+            
+            .toast-container {
+                left: 16px;
+                right: 16px;
+                max-width: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Floating Particles -->
+    <div id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header Brand -->
+        <div class="header-brand">
+            <div class="logo">
+                <i class="fas fa-search logo-icon"></i>
+                <div class="logo-text">FINDERTECH</div>
+            </div>
+            <div class="tagline">Find. Build. Earn.</div>
+            <div class="subtitle">Create Your Account</div>
+        </div>
+
+        <!-- Card Form -->
+        <div class="card">
+            <form id="registerForm">
+                <!-- Email Field -->
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope input-icon"></i>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            class="form-input" 
+                            placeholder="email@example.com" 
+                            required
+                        >
+                    </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            class="form-input" 
+                            placeholder="Minimal 6 karakter" 
+                            minlength="6"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Konfirmasi Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock input-icon"></i>
+                        <input 
+                            type="password" 
+                            id="confirmPassword" 
+                            class="form-input" 
+                            placeholder="Ulangi password" 
+                            minlength="6"
+                            required
+                        >
+                        <button type="button" class="password-toggle" id="toggleConfirmPassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Referral Code Field -->
+                <div class="form-group">
+                    <label class="form-label" for="referralCode">Kode Refferal (Opsional)</label>
+                    <div class="input-group">
+                        <i class="fas fa-users input-icon"></i>
+                        <input 
+                            type="text" 
+                            id="referralCode" 
+                            class="form-input" 
+                            placeholder="Masukkan kode refferal"
+                        >
+                    </div>
+                </div>
+
+                <!-- CAPTCHA -->
+                <div class="captcha-container">
+                    <div class="captcha-question" id="captchaQuestion"></div>
+                    <input 
+                        type="number" 
+                        id="captchaAnswer" 
+                        class="captcha-input" 
+                        placeholder="?"
+                        required
+                    >
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    <span id="btnText">DAFTAR</span>
+                    <div class="spinner" id="btnSpinner" style="display: none;"></div>
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="link-container">
+                <span class="link-text">Sudah punya akun? </span>
+                <a href="login.html" class="link">Login</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from 
+"https://www.gstatic.com/firebasejs/12.7.0/firebase-app.js";
+
+import { 
+  getAuth, 
+  createUserWithEmailAndPassword 
+} from 
+"https://www.gstatic.com/firebasejs/12.7.0/firebase-auth.js";
+
+import { 
+  getFirestore, 
+  doc, 
+  setDoc, 
+  updateDoc, 
+  increment,
+  serverTimestamp,
+  getDocs,        // 👈 TAMBAH INI
+  collection,     // 👈 TAMBAH INI
+  query,          // 👈 TAMBAH INI
+  where           // 👈 TAMBAH INI
+} from 
+"https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4EV4ywK6YZZgyBXVWSdic6l9tpzzzHpk",
+            authDomain: "findertech.firebaseapp.com",
+            projectId: "findertech",
+            storageBucket: "findertech.firebasestorage.app",
+            messagingSenderId: "510956153810",
+            appId: "1:510956153810:web:0aac2328ee61355569f60b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const registerForm = document.getElementById('registerForm');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const referralCodeInput = document.getElementById('referralCode');
+        const captchaQuestion = document.getElementById('captchaQuestion');
+        const captchaAnswerInput = document.getElementById('captchaAnswer');
+        const submitBtn = document.getElementById('submitBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
+        const togglePasswordBtn = document.getElementById('togglePassword');
+        const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+        const toastContainer = document.getElementById('toastContainer');
+
+        // Variables
+        let captchaSolution = 0;
+
+        // Initialize Floating Particles
+        function initParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+
+                const size = Math.random() * 80 + 20;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const duration = Math.random() * 10 + 10;
+                const delay = Math.random() * 5;
+
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite alternate`;
+
+                particlesContainer.appendChild(particle);
+            }
+
+            // Add floating animation
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes float {
+                    0%, 100% { transform: translate(0, 0) rotate(0deg); }
+                    25% { transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) rotate(${Math.random() * 10 - 5}deg); }
+                    50% { transform: translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(${Math.random() * 15 - 7.5}deg); }
+                    75% { transform: translate(${Math.random() * 20 - 10}px, ${Math.random() * 20 - 10}px) rotate(${Math.random() * 10 - 5}deg); }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Generate CAPTCHA
+        function generateCaptcha() {
+            const num1 = Math.floor(Math.random() * 9) + 1;
+            const num2 = Math.floor(Math.random() * 9) + 1;
+            captchaSolution = num1 + num2;
+            captchaQuestion.textContent = `${num1} + ${num2} = ?`;
+            captchaAnswerInput.value = '';
+        }
+
+        // Show Toast Message
+        function showToast(type, title, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-times-circle';
+            
+            toast.innerHTML = `
+                <i class="fas ${icon} toast-icon"></i>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+                <button class="toast-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+
+            toastContainer.appendChild(toast);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(30px)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            }, 5000);
+
+            // Close button
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(30px)';
+                setTimeout(() => {
+                    if (toast.parentNode) {
+                        toast.parentNode.removeChild(toast);
+                    }
+                }, 300);
+            });
+        }
+
+        // Toggle Password Visibility
+        function togglePasswordVisibility(input, button) {
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            button.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+        }
+
+        // Generate Random Referral Code
+        function generateReferralCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'RJ';
+            for (let i = 0; i < 4; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        // Get Random Profile Picture
+        function getRandomProfilePic() {
+            const randomNum = Math.floor(Math.random() * 20) + 1;
+            return `${randomNum}.jpg`;
+        }
+
+        // Check URL for referral parameter
+        function checkUrlForReferral() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refCode = urlParams.get('ref');
+            
+            if (refCode) {
+                referralCodeInput.value = refCode;
+                referralCodeInput.readOnly = true;
+                referralCodeInput.style.backgroundColor = 'var(--bg-light)';
+                referralCodeInput.style.cursor = 'not-allowed';
+            }
+        }
+
+        // Form Validation
+        function validateForm(email, password, confirmPassword, captchaAnswer) {
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showToast('error', 'Email Tidak Valid', 'Masukkan alamat email yang valid.');
+                return false;
+            }
+
+            // Password validation
+            if (password.length < 6) {
+                showToast('error', 'Password Terlalu Pendek', 'Password minimal 6 karakter.');
+                return false;
+            }
+
+            // Confirm password validation
+            if (password !== confirmPassword) {
+                showToast('error', 'Password Tidak Cocok', 'Password dan konfirmasi password harus sama.');
+                return false;
+            }
+
+            // CAPTCHA validation
+            if (parseInt(captchaAnswer) !== captchaSolution) {
+                showToast('error', 'CAPTCHA Salah', 'Silakan periksa kembali jawaban Anda.');
+                generateCaptcha();
+                return false;
+            }
+
+            return true;
+        }
+
+        // Register User
+        async function registerUser(email, password, referralCode) {
+            try {
+                // Create user with Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // Generate user data
+                const username = email.split('@')[0];
+                const userReferralCode = generateReferralCode();
+                const profilePic = getRandomProfilePic();
+
+                // Prepare user data for Firestore
+                const userData = {
+                    email: email,
+                    username: username,
+                    saldo: 15000,
+                    kodeReffUser: userReferralCode,
+                    referredBy: referralCode || null,
+                    totalReferral: 0,
+                    totalDeposit: 0,
+                    totalWithdraw: 0,
+                    fotoProfil: profilePic,
+                    email_verified: false,
+                    createdAt: serverTimestamp(),
+                    role: 'user',
+                    status: 'active'
+                };
+
+                // Save user data to Firestore
+                await setDoc(doc(db, 'users', user.uid), userData);
+
+                // If user registered with referral code, update referrer's data
+                if (referralCode) {
+                    try {
+                        // Find user with this referral code
+                        const usersRef = collection(db, 'users');
+                        const q = query(usersRef, where('kodeReffUser', '==', referralCode));
+                        const querySnapshot = await getDocs(q);
+                        
+                        if (!querySnapshot.empty) {
+    const referrerDoc = querySnapshot.docs[0];
+    const referrerId = referrerDoc.id;
+
+    // ❌ blok self-referral
+    if (referrerId === user.uid) return;
+
+    // ✅ update semua data referral
+    await updateDoc(doc(db, 'users', referrerId), {
+        totalReferral: increment(1),
+        activeReferral: increment(1),
+        referralBonusTotal: increment(5000),
+        saldo: increment(5000)
+    });
+
+    // ✅ simpan histori bonus
+    await setDoc(
+        doc(db, 'transactions', `${Date.now()}_${referrerId}`),
+        {
+            uid: referrerId,
+            type: 'referral_register',
+            amount: 5000,
+            fromUser: user.uid,
+            createdAt: serverTimestamp()
+        }
+    );
+
+                            // Add transaction for referrer bonus
+                            const bonusTransaction = {
+                                uid: referrerId,
+                                type: 'refferal_register',
+                                amount: 10000,
+                                relatedUserId: user.uid,
+                                createdAt: serverTimestamp()
+                            };
+                            
+                            await setDoc(doc(db, 'transactions', `${Date.now()}_${referrerId}`), bonusTransaction);
+                        }
+                    } catch (referralError) {
+                        console.warn('Referral bonus error:', referralError);
+                        // Continue even if referral bonus fails
+                    }
+                }
+
+                // Add transaction for new user bonus
+                const newUserBonus = {
+                    uid: user.uid,
+                    type: 'new_user_bonus',
+                    amount: 15000,
+                    createdAt: serverTimestamp()
+                };
+                
+                await setDoc(doc(db, 'transactions', `${Date.now()}_${user.uid}`), newUserBonus);
+
+                return { success: true, user: user };
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                
+                let errorMessage = 'Terjadi kesalahan saat mendaftar.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = 'Email sudah terdaftar. Silakan gunakan email lain.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = 'Format email tidak valid.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = 'Password terlalu lemah. Gunakan password yang lebih kuat.';
+                } else if (error.code === 'auth/network-request-failed') {
+                    errorMessage = 'Koneksi jaringan bermasalah. Periksa koneksi internet Anda.';
+                }
+
+                return { success: false, error: errorMessage };
+            }
+        }
+
+        // Initialize
+        function init() {
+            initParticles();
+            generateCaptcha();
+            checkUrlForReferral();
+
+            // Password toggle event listeners
+            togglePasswordBtn.addEventListener('click', () => {
+                togglePasswordVisibility(passwordInput, togglePasswordBtn);
+            });
+
+            toggleConfirmPasswordBtn.addEventListener('click', () => {
+                togglePasswordVisibility(confirmPasswordInput, toggleConfirmPasswordBtn);
+            });
+
+            // Form submission
+            registerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Get form values
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const referralCode = referralCodeInput.value.trim();
+                const captchaAnswer = captchaAnswerInput.value;
+
+                // Validate form
+                if (!validateForm(email, password, confirmPassword, captchaAnswer)) {
+                    return;
+                }
+
+                // Show loading state
+                submitBtn.disabled = true;
+                btnText.textContent = 'MEMPROSES...';
+                btnSpinner.style.display = 'block';
+                submitBtn.classList.add('btn-loading');
+
+                // Register user
+                const result = await registerUser(email, password, referralCode);
+
+                // Hide loading state
+                submitBtn.disabled = false;
+                btnText.textContent = 'DAFTAR';
+                btnSpinner.style.display = 'none';
+                submitBtn.classList.remove('btn-loading');
+
+                if (result.success) {
+                    showToast('success', 'Pendaftaran Berhasil!', 'Akun Anda berhasil dibuat. Silakan login.');
+                    
+                    // Clear form
+                    registerForm.reset();
+                    generateCaptcha();
+                    checkUrlForReferral();
+                    
+                    // Redirect to login page after 3 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 3000);
+                } else {
+                    showToast('error', 'Pendaftaran Gagal', result.error);
+                    generateCaptcha();
+                }
+            });
+
+            // Input focus animations
+            const inputs = document.querySelectorAll('.form-input, .captcha-input');
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.style.transform = 'translateY(-2px)';
+                });
+
+                input.addEventListener('blur', () => {
+                    input.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+        }
+
+        // Initialize when DOM is loaded
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

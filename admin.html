@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FINDERTECH | Admin User</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --secondary: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-border: #E0E0E0;
+            --gray-text: #616161;
+            --black: #212121;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: var(--gray-light);
+            color: var(--black);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        /* PAGE LOAD ANIMATION */
+        .page-content {
+            animation: pageFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes pageFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ADMIN HEADER */
+        .admin-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-border);
+            z-index: 100;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow);
+        }
+
+        .admin-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-logo {
+            color: var(--primary);
+            font-size: 24px;
+        }
+
+        .admin-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .admin-badge {
+            background: var(--primary);
+            color: var(--white);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .admin-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: var(--error);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logout-btn:hover {
+            background: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        /* ADMIN NAV */
+        .admin-nav {
+            position: fixed;
+            top: 72px;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-border);
+            padding: 0 16px;
+            z-index: 99;
+            display: flex;
+            gap: 1px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .admin-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-item {
+            padding: 16px 20px;
+            background: none;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-text);
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+            position: relative;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item:hover {
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: rgba(30, 136, 229, 0.05);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 140px 16px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* SEARCH SECTION */
+        .search-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .search-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 16px;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        .search-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* USER TABLE */
+        .users-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .total-users {
+            font-size: 14px;
+            color: var(--gray-text);
+            background: var(--gray-light);
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .users-table th {
+            background: var(--gray-light);
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--black);
+            border-bottom: 2px solid var(--gray-border);
+        }
+
+        .users-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--gray-border);
+            vertical-align: middle;
+        }
+
+        .users-table tr:hover {
+            background: rgba(30, 136, 229, 0.02);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-email {
+            font-weight: 500;
+            color: var(--black);
+        }
+
+        .user-uid {
+            font-size: 12px;
+            color: var(--gray-text);
+        }
+
+        .saldo-amount {
+            font-weight: 600;
+            color: var(--primary);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+
+        .status-banned {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--error);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(30, 136, 229, 0.1);
+            color: var(--primary);
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-add {
+            background: rgba(46, 125, 50, 0.1);
+            color: var(--success);
+        }
+
+        .btn-add:hover {
+            background: rgba(46, 125, 50, 0.2);
+        }
+
+        .btn-subtract {
+            background: rgba(249, 168, 37, 0.1);
+            color: var(--warning);
+        }
+
+        .btn-subtract:hover {
+            background: rgba(249, 168, 37, 0.2);
+        }
+
+        .btn-ban {
+            background: rgba(211, 47, 47, 0.1);
+            color: var(--error);
+        }
+
+        .btn-ban:hover {
+            background: rgba(211, 47, 47, 0.2);
+        }
+
+        .btn-unban {
+            background: rgba(30, 136, 229, 0.1);
+            color: var(--primary);
+        }
+
+        .btn-unban:hover {
+            background: rgba(30, 136, 229, 0.2);
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .modal-btn-secondary {
+            background: var(--gray-light);
+            color: var(--black);
+            border: 1px solid var(--gray-border);
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        .modal-btn-danger {
+            background: var(--error);
+            color: var(--white);
+        }
+
+        .modal-btn-danger:hover {
+            background: #b71c1c;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--gray-border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: var(--gray-text);
+            margin-top: 4px;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: var(--black);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+            color: var(--black);
+        }
+
+        /* LOADING STATES */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .admin-header {
+                padding: 12px;
+            }
+            
+            .admin-title {
+                font-size: 16px;
+            }
+            
+            .main-content {
+                padding: 120px 12px 40px;
+            }
+            
+            .users-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+        }
+
+        /* UTILITY CLASSES */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray-text);
+        }
+
+        .empty-state i {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: var(--gray-border);
+        }
+
+        /* FOOTER */
+        .admin-footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--gray-text);
+            font-size: 12px;
+            border-top: 1px solid var(--gray-border);
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Admin Header -->
+    <header class="admin-header">
+        <div class="admin-brand">
+            <div class="admin-logo">
+                <i class="fas fa-search"></i>
+            </div>
+            <div>
+                <div class="admin-title">FINDERTECH Admin Panel</div>
+                <div class="admin-badge">User Management</div>
+            </div>
+        </div>
+        <div class="admin-actions">
+            <button class="logout-btn" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </button>
+        </div>
+    </header>
+
+    <!-- Admin Navigation -->
+    <nav class="admin-nav">
+        <button class="nav-item" onclick="window.location.href='admin.html'">
+            Dashboard
+        </button>
+        <button class="nav-item" onclick="window.location.href='admin-transaksi.html'">
+            Transaksi
+        </button>
+        <button class="nav-item active" onclick="window.location.href='admin-user.html'">
+            User Management
+        </button>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h2 class="search-title">Cari User</h2>
+            <div class="search-form">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    id="searchInput" 
+                    placeholder="Cari berdasarkan email atau UID..."
+                >
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                    Cari
+                </button>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div class="users-section">
+            <div class="section-header">
+                <h2 class="section-title">Daftar User</h2>
+                <div class="total-users" id="totalUsers">0 users</div>
+            </div>
+            
+            <div id="usersTableContainer">
+                <!-- Users table will be inserted here -->
+                <div class="empty-state">
+                    <i class="fas fa-users"></i>
+                    <p>Memuat data user...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="admin-footer">
+        © FINDERTECH. All rights reserved.
+    </footer>
+
+    <!-- Modals -->
+    
+    <!-- Add Saldo Modal -->
+    <div class="modal-overlay" id="addSaldoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Tambah Saldo</div>
+                <button class="modal-close" id="closeAddModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label" for="userEmailAdd">Email User</label>
+                    <input type="text" class="input-field" id="userEmailAdd" readonly>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="addAmount">Jumlah Tambah</label>
+                    <input type="number" class="input-field" id="addAmount" placeholder="100000" min="1000" step="1000">
+                    <div class="input-hint">Minimal Rp 1.000</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="addNote">Catatan (Opsional)</label>
+                    <textarea class="input-field" id="addNote" placeholder="Alasan penambahan saldo..." rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelAddBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-primary" id="confirmAddBtn">
+                    TAMBAH SALDO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subtract Saldo Modal -->
+    <div class="modal-overlay" id="subtractSaldoModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Kurangi Saldo</div>
+                <button class="modal-close" id="closeSubtractModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label" for="userEmailSubtract">Email User</label>
+                    <input type="text" class="input-field" id="userEmailSubtract" readonly>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="subtractAmount">Jumlah Kurangi</label>
+                    <input type="number" class="input-field" id="subtractAmount" placeholder="100000" min="1000" step="1000">
+                    <div class="input-hint">Minimal Rp 1.000</div>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="subtractNote">Catatan (Opsional)</label>
+                    <textarea class="input-field" id="subtractNote" placeholder="Alasan pengurangan saldo..." rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelSubtractBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-danger" id="confirmSubtractBtn">
+                    KURANGI SALDO
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ban User Modal -->
+    <div class="modal-overlay" id="banUserModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Ban User</div>
+                <button class="modal-close" id="closeBanModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label" for="userEmailBan">Email User</label>
+                    <input type="text" class="input-field" id="userEmailBan" readonly>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="banReason">Alasan Ban (Opsional)</label>
+                    <textarea class="input-field" id="banReason" placeholder="Alasan melakukan ban..." rows="3"></textarea>
+                </div>
+                <div class="input-hint">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    User yang diban tidak dapat login dan melakukan transaksi.
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelBanBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-danger" id="confirmBanBtn">
+                    BAN USER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Unban User Modal -->
+    <div class="modal-overlay" id="unbanUserModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Unban User</div>
+                <button class="modal-close" id="closeUnbanModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label" for="userEmailUnban">Email User</label>
+                    <input type="text" class="input-field" id="userEmailUnban" readonly>
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="unbanReason">Catatan (Opsional)</label>
+                    <textarea class="input-field" id="unbanReason" placeholder="Alasan unban user..." rows="3"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelUnbanBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-primary" id="confirmUnbanBtn">
+                    UNBAN USER
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged,
+            signOut
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            collection, 
+            query, 
+            where, 
+            getDocs,
+            onSnapshot,
+            updateDoc,
+            addDoc,
+            serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4EV4ywK6YZZgyBXVWSdic6l9tpzzzHpk",
+            authDomain: "findertech.firebaseapp.com",
+            projectId: "findertech",
+            storageBucket: "findertech.firebasestorage.app",
+            messagingSenderId: "510956153810",
+            appId: "1:510956153810:web:0aac2328ee61355569f60b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const logoutBtn = document.getElementById('logoutBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const usersTableContainer = document.getElementById('usersTableContainer');
+        const totalUsersEl = document.getElementById('totalUsers');
+        const toastEl = document.getElementById('toast');
+
+        // Modal Elements
+        const addSaldoModal = document.getElementById('addSaldoModal');
+        const subtractSaldoModal = document.getElementById('subtractSaldoModal');
+        const banUserModal = document.getElementById('banUserModal');
+        const unbanUserModal = document.getElementById('unbanUserModal');
+
+        // Global Variables
+        let currentAdmin = null;
+        let allUsers = [];
+        let currentActionUser = null;
+
+        // Toast Notification Function
+        function showToast(message, type = 'default', duration = 3000) {
+            toastEl.textContent = message;
+            toastEl.className = 'toast';
+            
+            if (type !== 'default') {
+                toastEl.classList.add(type);
+            }
+            
+            toastEl.classList.add('show');
+            
+            setTimeout(() => {
+                toastEl.classList.remove('show', 'error', 'success', 'warning');
+            }, duration);
+        }
+
+        // Format Currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Check Admin Role
+        async function checkAdminRole(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    return userData.role === 'admin';
+                }
+                return false;
+            } catch (error) {
+                console.error('Error checking admin role:', error);
+                return false;
+            }
+        }
+
+        // Load All Users
+        function loadUsers(searchTerm = '') {
+            try {
+                const usersQuery = query(collection(db, 'users'));
+                
+                onSnapshot(usersQuery, (snapshot) => {
+                    allUsers = [];
+                    let filteredUsers = [];
+                    
+                    snapshot.forEach((docItem) => {
+                        const userData = docItem.data();
+                        userData.uid = docItem.id;
+                        allUsers.push(userData);
+                    });
+                    
+                    // Filter users based on search term
+                    if (searchTerm) {
+                        filteredUsers = allUsers.filter(user => 
+                            user.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            user.uid.toLowerCase().includes(searchTerm.toLowerCase())
+                        );
+                    } else {
+                        filteredUsers = allUsers;
+                    }
+                    
+                    // Update total count
+                    totalUsersEl.textContent = `${filteredUsers.length} user${filteredUsers.length !== 1 ? 's' : ''}`;
+                    
+                    // Render users table
+                    renderUsersTable(filteredUsers);
+                    
+                }, (error) => {
+                    console.error('Error loading users:', error);
+                    usersTableContainer.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>Gagal memuat data user</p>
+                        </div>
+                    `;
+                });
+                
+            } catch (error) {
+                console.error('Error setting up users listener:', error);
+            }
+        }
+
+        // Render Users Table
+        function renderUsersTable(users) {
+            if (users.length === 0) {
+                usersTableContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>Tidak ada user yang ditemukan</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let tableHTML = `
+                <table class="users-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Saldo</th>
+                            <th>Status</th>
+                            <th>Role</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            users.forEach(user => {
+                const userEmail = user.email || 'N/A';
+                const username = user.username || userEmail.split('@')[0];
+                const saldo = user.saldo || 0;
+                const status = user.status || 'active';
+                const role = user.role || 'user';
+                const avatarNumber = user.fotoProfil ? parseInt(user.fotoProfil.replace('.jpg', '')) || 1 : 1;
+                
+                // Get first letter of username for avatar
+                const firstLetter = username.charAt(0).toUpperCase();
+                
+                // Status badge
+                const statusBadge = status === 'active' 
+                    ? '<span class="status-badge status-active">Active</span>'
+                    : '<span class="status-badge status-banned">Banned</span>';
+                
+                // Role badge
+                const roleBadge = role === 'admin'
+                    ? '<span class="role-badge">Admin</span>'
+                    : '<span class="role-badge">User</span>';
+                
+                // Action buttons based on status
+                let actionButtons = '';
+                
+                if (status === 'active') {
+                    actionButtons = `
+                        <button class="action-btn btn-add" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <button class="action-btn btn-subtract" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-minus"></i> Kurangi
+                        </button>
+                        <button class="action-btn btn-ban" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-ban"></i> Ban
+                        </button>
+                    `;
+                } else {
+                    actionButtons = `
+                        <button class="action-btn btn-add" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <button class="action-btn btn-unban" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-check"></i> Unban
+                        </button>
+                    `;
+                }
+                
+                // Don't show ban button for admin users (except self if not current admin)
+                if (role === 'admin' && user.uid !== currentAdmin?.uid) {
+                    actionButtons = `
+                        <button class="action-btn btn-add" data-uid="${user.uid}" data-email="${userEmail}">
+                            <i class="fas fa-plus"></i> Tambah
+                        </button>
+                        <span style="color: var(--gray-text); font-size: 12px;">Admin User</span>
+                    `;
+                }
+                
+                tableHTML += `
+                    <tr>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar" style="background: var(--primary);">
+                                    ${firstLetter}
+                                </div>
+                                <div class="user-details">
+                                    <div class="user-email">${userEmail}</div>
+                                    <div class="user-uid">${user.uid.substring(0, 8)}...</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="saldo-amount">${formatCurrency(saldo)}</td>
+                        <td>${statusBadge}</td>
+                        <td>${roleBadge}</td>
+                        <td>
+                            <div class="action-buttons">
+                                ${actionButtons}
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+            
+            usersTableContainer.innerHTML = tableHTML;
+            
+            // Add event listeners to action buttons
+            setupActionButtons();
+        }
+
+        // Setup Action Buttons
+        function setupActionButtons() {
+            // Add Saldo buttons
+            document.querySelectorAll('.btn-add').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const uid = e.currentTarget.dataset.uid;
+                    const email = e.currentTarget.dataset.email;
+                    openAddSaldoModal(uid, email);
+                });
+            });
+            
+            // Subtract Saldo buttons
+            document.querySelectorAll('.btn-subtract').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const uid = e.currentTarget.dataset.uid;
+                    const email = e.currentTarget.dataset.email;
+                    openSubtractSaldoModal(uid, email);
+                });
+            });
+            
+            // Ban buttons
+            document.querySelectorAll('.btn-ban').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const uid = e.currentTarget.dataset.uid;
+                    const email = e.currentTarget.dataset.email;
+                    openBanUserModal(uid, email);
+                });
+            });
+            
+            // Unban buttons
+            document.querySelectorAll('.btn-unban').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const uid = e.currentTarget.dataset.uid;
+                    const email = e.currentTarget.dataset.email;
+                    openUnbanUserModal(uid, email);
+                });
+            });
+        }
+
+        // Modal Functions
+        function openAddSaldoModal(uid, email) {
+            currentActionUser = { uid, email };
+            document.getElementById('userEmailAdd').value = email;
+            document.getElementById('addAmount').value = '';
+            document.getElementById('addNote').value = '';
+            addSaldoModal.classList.add('active');
+        }
+
+        function openSubtractSaldoModal(uid, email) {
+            currentActionUser = { uid, email };
+            document.getElementById('userEmailSubtract').value = email;
+            document.getElementById('subtractAmount').value = '';
+            document.getElementById('subtractNote').value = '';
+            subtractSaldoModal.classList.add('active');
+        }
+
+        function openBanUserModal(uid, email) {
+            currentActionUser = { uid, email };
+            document.getElementById('userEmailBan').value = email;
+            document.getElementById('banReason').value = '';
+            banUserModal.classList.add('active');
+        }
+
+        function openUnbanUserModal(uid, email) {
+            currentActionUser = { uid, email };
+            document.getElementById('userEmailUnban').value = email;
+            document.getElementById('unbanReason').value = '';
+            unbanUserModal.classList.add('active');
+        }
+
+        function closeAllModals() {
+            addSaldoModal.classList.remove('active');
+            subtractSaldoModal.classList.remove('active');
+            banUserModal.classList.remove('active');
+            unbanUserModal.classList.remove('active');
+            currentActionUser = null;
+        }
+
+        // Add Saldo
+        async function addSaldo() {
+            const amount = parseInt(document.getElementById('addAmount').value);
+            const note = document.getElementById('addNote').value.trim();
+            
+            if (!amount || amount < 1000) {
+                showToast('Minimal tambah saldo Rp 1.000', 'error');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', currentActionUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (!userDoc.exists()) {
+                    showToast('User tidak ditemukan', 'error');
+                    return;
+                }
+                
+                const currentSaldo = userDoc.data().saldo || 0;
+                const newSaldo = currentSaldo + amount;
+                
+                // Update user saldo
+                await updateDoc(userRef, {
+                    saldo: newSaldo,
+                    totalDeposit: (userDoc.data().totalDeposit || 0) + amount
+                });
+                
+                // Record transaction
+                await addDoc(collection(db, 'transactions'), {
+                    uid: currentActionUser.uid,
+                    type: 'admin_adjustment',
+                    amount: amount,
+                    note: note || `Penambahan saldo oleh admin: ${formatCurrency(amount)}`,
+                    adminUid: currentAdmin.uid,
+                    adminEmail: currentAdmin.email,
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast(`Berhasil menambah saldo ${formatCurrency(amount)} untuk ${currentActionUser.email}`, 'success');
+                closeAllModals();
+                
+            } catch (error) {
+                console.error('Error adding saldo:', error);
+                showToast('Gagal menambah saldo', 'error');
+            }
+        }
+
+        // Subtract Saldo
+        async function subtractSaldo() {
+            const amount = parseInt(document.getElementById('subtractAmount').value);
+            const note = document.getElementById('subtractNote').value.trim();
+            
+            if (!amount || amount < 1000) {
+                showToast('Minimal kurangi saldo Rp 1.000', 'error');
+                return;
+            }
+            
+            try {
+                const userRef = doc(db, 'users', currentActionUser.uid);
+                const userDoc = await getDoc(userRef);
+                
+                if (!userDoc.exists()) {
+                    showToast('User tidak ditemukan', 'error');
+                    return;
+                }
+                
+                const currentSaldo = userDoc.data().saldo || 0;
+                
+                if (amount > currentSaldo) {
+                    showToast('Jumlah pengurangan melebihi saldo user', 'error');
+                    return;
+                }
+                
+                const newSaldo = currentSaldo - amount;
+                
+                // Update user saldo
+                await updateDoc(userRef, {
+                    saldo: newSaldo,
+                    totalWithdraw: (userDoc.data().totalWithdraw || 0) + amount
+                });
+                
+                // Record transaction
+                await addDoc(collection(db, 'transactions'), {
+                    uid: currentActionUser.uid,
+                    type: 'admin_adjustment',
+                    amount: -amount,
+                    note: note || `Pengurangan saldo oleh admin: ${formatCurrency(amount)}`,
+                    adminUid: currentAdmin.uid,
+                    adminEmail: currentAdmin.email,
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast(`Berhasil mengurangi saldo ${formatCurrency(amount)} untuk ${currentActionUser.email}`, 'success');
+                closeAllModals();
+                
+            } catch (error) {
+                console.error('Error subtracting saldo:', error);
+                showToast('Gagal mengurangi saldo', 'error');
+            }
+        }
+
+        // Ban User
+        async function banUser() {
+            const reason = document.getElementById('banReason').value.trim();
+            
+            try {
+                const userRef = doc(db, 'users', currentActionUser.uid);
+                
+                // Update user status
+                await updateDoc(userRef, {
+                    status: 'banned',
+                    bannedAt: serverTimestamp(),
+                    banReason: reason || 'Diban oleh admin'
+                });
+                
+                // Record admin action
+                await addDoc(collection(db, 'admin_actions'), {
+                    type: 'ban_user',
+                    targetUid: currentActionUser.uid,
+                    targetEmail: currentActionUser.email,
+                    reason: reason,
+                    adminUid: currentAdmin.uid,
+                    adminEmail: currentAdmin.email,
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast(`Berhasil ban user ${currentActionUser.email}`, 'success');
+                closeAllModals();
+                
+            } catch (error) {
+                console.error('Error banning user:', error);
+                showToast('Gagal ban user', 'error');
+            }
+        }
+
+        // Unban User
+        async function unbanUser() {
+            const note = document.getElementById('unbanReason').value.trim();
+            
+            try {
+                const userRef = doc(db, 'users', currentActionUser.uid);
+                
+                // Update user status
+                await updateDoc(userRef, {
+                    status: 'active',
+                    unbannedAt: serverTimestamp(),
+                    unbanNote: note || 'Diunban oleh admin'
+                });
+                
+                // Record admin action
+                await addDoc(collection(db, 'admin_actions'), {
+                    type: 'unban_user',
+                    targetUid: currentActionUser.uid,
+                    targetEmail: currentActionUser.email,
+                    note: note,
+                    adminUid: currentAdmin.uid,
+                    adminEmail: currentAdmin.email,
+                    createdAt: serverTimestamp()
+                });
+                
+                showToast(`Berhasil unban user ${currentActionUser.email}`, 'success');
+                closeAllModals();
+                
+            } catch (error) {
+                console.error('Error unbanning user:', error);
+                showToast('Gagal unban user', 'error');
+            }
+        }
+
+        // Event Listeners
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = 'login.html';
+            } catch (error) {
+                console.error('Error logging out:', error);
+            }
+        });
+
+        searchBtn.addEventListener('click', () => {
+            loadUsers(searchInput.value.trim());
+        });
+
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loadUsers(searchInput.value.trim());
+            }
+        });
+
+        // Modal Close Buttons
+        document.getElementById('closeAddModal').addEventListener('click', closeAllModals);
+        document.getElementById('closeSubtractModal').addEventListener('click', closeAllModals);
+        document.getElementById('closeBanModal').addEventListener('click', closeAllModals);
+        document.getElementById('closeUnbanModal').addEventListener('click', closeAllModals);
+
+        document.getElementById('cancelAddBtn').addEventListener('click', closeAllModals);
+        document.getElementById('cancelSubtractBtn').addEventListener('click', closeAllModals);
+        document.getElementById('cancelBanBtn').addEventListener('click', closeAllModals);
+        document.getElementById('cancelUnbanBtn').addEventListener('click', closeAllModals);
+
+        // Modal Confirm Buttons
+        document.getElementById('confirmAddBtn').addEventListener('click', addSaldo);
+        document.getElementById('confirmSubtractBtn').addEventListener('click', subtractSaldo);
+        document.getElementById('confirmBanBtn').addEventListener('click', banUser);
+        document.getElementById('confirmUnbanBtn').addEventListener('click', unbanUser);
+
+        // Auth State Listener
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                const isAdmin = await checkAdminRole(user.uid);
+                
+                if (isAdmin) {
+                    currentAdmin = {
+                        uid: user.uid,
+                        email: user.email
+                    };
+                    loadUsers();
+                } else {
+                    // Not an admin, redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            } else {
+                // Not logged in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+    </script>
+</body>
+</html>

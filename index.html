@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="FINDERTECH - Platform infrastruktur digital dengan sistem reward harian stabil. Solusi terpercaya untuk pertumbuhan bisnis digital Anda.">
+    <meta name="theme-color" content="#0a1a2a">
+    <title>FINDERTECH | Infrastruktur Digital & Reward Harian</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        /* RESET & BASE STYLES - CONSISTENT WITH DASHBOARD */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --secondary: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-border: #E0E0E0;
+            --gray-text: #616161;
+            --black: #212121;
+            --dark-bg: #0a1a2a;
+            --dark-card: #162b40;
+            --dark-text: #f8fafc;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: var(--dark-bg);
+            color: var(--dark-text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        /* ANIMATED BACKGROUND - SAME AS DASHBOARD */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.05) 0%, rgba(13, 71, 161, 0.05) 100%);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+            background: var(--primary-dark);
+        }
+
+        .particle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 70%;
+            animation-delay: -15s;
+            background: var(--secondary);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
+            }
+        }
+
+        /* PAGE LOAD ANIMATION */
+        .page-content {
+            animation: pageFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes pageFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TOP NAVIGATION - MOBILE FIRST */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 26, 42, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: navFadeDown 0.5s ease-out 0.2s forwards;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        @keyframes navFadeDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 20px;
+        }
+
+        .brand i {
+            font-size: 22px;
+            color: var(--primary);
+        }
+
+        /* HAMBURGER MENU */
+        .menu-toggle {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 30px;
+            height: 24px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 3px;
+            background-color: var(--white);
+            border-radius: 3px;
+            transition: var(--transition);
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        /* NAVIGATION MENU */
+        .nav-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 26, 42, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            transform: translateY(-100%);
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            z-index: 999;
+        }
+
+        .nav-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .nav-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            list-style: none;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 16px;
+            color: var(--dark-text);
+            text-decoration: none;
+            border-radius: var(--radius);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background: rgba(30, 136, 229, 0.1);
+            color: var(--secondary);
+        }
+
+        .nav-cta {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* BUTTONS - SAME AS DASHBOARD */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 14px 24px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            outline: none;
+            min-height: 44px;
+            text-align: center;
+            gap: 8px;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--dark-text);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 16px;
+            min-width: 180px;
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 90px 16px 40px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* HERO SECTION */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeIn 0.6s ease-out 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* CARDS - SAME AS DASHBOARD */
+        .card {
+            background: rgba(22, 43, 64, 0.7);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 24px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            animation: cardSlideUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+            border-color: rgba(30, 136, 229, 0.3);
+        }
+
+        @keyframes cardSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-1 {
+            animation-delay: 0.4s;
+        }
+
+        .card-2 {
+            animation-delay: 0.5s;
+        }
+
+        .card-3 {
+            animation-delay: 0.6s;
+        }
+
+        .card-4 {
+            animation-delay: 0.7s;
+        }
+
+        /* STATS CARD */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 16px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(30, 136, 229, 0.1);
+            border-radius: var(--radius);
+            border: 1px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .stat-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            color: var(--primary);
+        }
+
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* FEATURES CARD */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            transition: var(--transition);
+        }
+
+        .feature-item:hover {
+            background: rgba(30, 136, 229, 0.1);
+            transform: translateX(5px);
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            color: var(--primary);
+            margin-top: 4px;
+        }
+
+        .feature-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark-text);
+        }
+
+        .feature-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        /* HOW IT WORKS */
+        .steps {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+            position: relative;
+        }
+
+        .step {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .step-number {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--dark-text);
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.5;
+        }
+
+        /* PRODUCTS CARD */
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .product-item {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            border-color: rgba(30, 136, 229, 0.3);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .product-icon {
+            font-size: 40px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+
+        .product-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-text);
+        }
+
+        .product-price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--secondary);
+            margin: 16px 0;
+        }
+
+        .product-features {
+            list-style: none;
+            margin: 16px 0;
+            text-align: left;
+        }
+
+        .product-features li {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+        }
+
+        .product-features li i {
+            color: var(--success);
+        }
+
+        /* REFERRAL SECTION */
+        .referral-section {
+            background: rgba(30, 136, 229, 0.1);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+            border: 1px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .referral-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+
+        .referral-benefits {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .referral-benefits li {
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .referral-benefits li i {
+            color: var(--success);
+        }
+
+        /* CTA SECTION */
+        .cta-section {
+            text-align: center;
+            padding: 32px 24px;
+            background: rgba(30, 136, 229, 0.1);
+            border-radius: var(--radius);
+            border: 1px solid rgba(30, 136, 229, 0.2);
+        }
+
+        .cta-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            color: var(--dark-text);
+        }
+
+        .cta-description {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 24px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* FOOTER */
+        .footer {
+            padding: 40px 16px 20px;
+            background: rgba(5, 15, 25, 0.95);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 20px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .footer-logo i {
+            color: var(--primary);
+        }
+
+        .footer-description {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+
+        .footer-column h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--dark-text);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column li {
+            margin-bottom: 8px;
+        }
+
+        .footer-column a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .footer-column a:hover {
+            color: var(--secondary);
+            padding-left: 5px;
+        }
+
+        .legal-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+
+        .legal-links a {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+            transition: var(--transition);
+        }
+
+        .legal-links a:hover {
+            color: var(--secondary);
+            text-decoration: underline;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 13px;
+        }
+
+        /* MODAL - SAME STYLING AS DASHBOARD */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+            padding: 16px;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: var(--dark-card);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 24px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: transparent;
+            border: none;
+            color: var(--dark-text);
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--secondary);
+        }
+
+        .modal h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--secondary);
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--dark-text);
+        }
+
+        .modal p, .modal ul {
+            margin-bottom: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        .modal ul {
+            padding-left: 20px;
+            list-style-type: disc;
+        }
+
+        .modal li {
+            margin-bottom: 8px;
+        }
+
+        /* TOAST NOTIFICATION - SAME AS DASHBOARD */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: rgba(33, 33, 33, 0.95);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-hover);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* LOADING ANIMATION - SAME AS DASHBOARD */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                rgba(255, 255, 255, 0.05) 25%, 
+                rgba(255, 255, 255, 0.1) 50%, 
+                rgba(255, 255, 255, 0.05) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-title {
+            height: 32px;
+            width: 70%;
+            margin-bottom: 16px;
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        .skeleton-card {
+            height: 200px;
+            margin-bottom: 20px;
+            border-radius: var(--radius);
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 768px) {
+            .top-nav {
+                padding: 20px 32px;
+            }
+
+            .brand {
+                font-size: 22px;
+            }
+
+            .menu-toggle {
+                display: none;
+            }
+
+            .nav-menu {
+                position: static;
+                transform: none;
+                opacity: 1;
+                visibility: visible;
+                background: transparent;
+                padding: 0;
+                border: none;
+                width: auto;
+            }
+
+            .nav-list {
+                flex-direction: row;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .nav-link {
+                padding: 8px 16px;
+            }
+
+            .nav-cta {
+                flex-direction: row;
+                margin-top: 0;
+                margin-left: 16px;
+                gap: 12px;
+            }
+
+            .main-content {
+                max-width: 800px;
+                padding: 100px 32px 40px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-description {
+                font-size: 18px;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .hero-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .steps {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .step {
+                flex-direction: column;
+                text-align: center;
+                flex: 1;
+            }
+
+            .step-number {
+                margin: 0 auto 16px;
+            }
+
+            .products-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .referral-benefits {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .referral-benefits li {
+                margin-bottom: 0;
+            }
+
+            .cta-buttons {
+                flex-direction: row;
+                justify-content: center;
+            }
+
+            .footer-content {
+                max-width: 800px;
+            }
+
+            .footer-links {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .main-content {
+                max-width: 1200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animated">
+        <div class="bg-gradient"></div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <a href="#" class="brand">
+            <i class="fas fa-search"></i>
+            FINDERTECH
+        </a>
+        
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <div class="nav-menu" id="navMenu">
+            <ul class="nav-list">
+                <li><a href="#" class="nav-link">Beranda</a></li>
+                <li><a href="#produk" class="nav-link">Produk</a></li>
+                <li><a href="#cara-kerja" class="nav-link">Cara Kerja</a></li>
+                <li><a href="#referral" class="nav-link">Referral</a></li>
+                <div class="nav-cta">
+                    <li><a href="login.html" class="btn btn-secondary">Masuk</a></li>
+                    <li><a href="daftar.html" class="btn btn-primary">Daftar</a></li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1 class="hero-title">
+                Solusi Infrastruktur Digital dengan Reward Harian Stabil
+            </h1>
+            <p class="hero-description">
+                FINDERTECH menyediakan platform infrastruktur digital terdepan dengan sistem reward harian yang stabil dan transparan. Bergabung dengan ribuan pengguna yang telah merasakan manfaatnya.
+            </p>
+            <div class="hero-buttons">
+                <a href="daftar.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus"></i>
+                    Daftar Sekarang
+                </a>
+                <a href="login.html" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Masuk Akun
+                </a>
+            </div>
+        </section>
+
+        <!-- Stats Card -->
+        <div class="card card-1">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--dark-text);">Statistik Platform</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-number" id="statUsers">12.5K+</div>
+                    <div class="stat-label">Total Pengguna</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="stat-number" id="statProducts">42+</div>
+                    <div class="stat-label">Produk Aktif</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-gift"></i>
+                    </div>
+                    <div class="stat-number" id="statRewards">8.9M+</div>
+                    <div class="stat-label">Reward Dibagikan</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <div class="stat-number" id="statUptime">99.9%</div>
+                    <div class="stat-label">Sistem Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Card -->
+        <div class="card card-2">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--dark-text);">Keunggulan Platform</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Infrastruktur Stabil</h3>
+                        <p>Dibangun dengan teknologi terkini dan server berkapasitas tinggi untuk ketersediaan 24/7.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Reward Harian Otomatis</h3>
+                        <p>Sistem reward otomatis yang stabil dan konsisten, dibagikan setiap hari tanpa tindakan manual.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Sistem Transparan</h3>
+                        <p>Semua data dan perhitungan reward tersedia secara real-time di dashboard pribadi Anda.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Keamanan Data Tinggi</h3>
+                        <p>Enkripsi tingkat militer dan sistem keamanan berlapis melindungi data dan aset digital Anda.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- How It Works -->
+        <div class="card card-3" id="cara-kerja">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--dark-text);">Cara Kerja</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Daftar Akun</h3>
+                        <p>Buat akun FINDERTECH Anda secara gratis melalui halaman pendaftaran.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Pilih Produk</h3>
+                        <p>Pilih produk infrastruktur sesuai kebutuhan Anda dari berbagai pilihan yang tersedia.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Sistem Berjalan</h3>
+                        <p>Sistem kami akan bekerja otomatis untuk mengoptimalkan infrastruktur yang Anda pilih.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Reward Masuk Harian</h3>
+                        <p>Nikmati reward harian yang stabil langsung masuk ke akun Anda setiap hari.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products -->
+        <div class="card card-4" id="produk">
+            <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: var(--dark-text);">Produk Unggulan</h2>
+            <div class="products-grid">
+                <div class="product-item">
+                    <div class="product-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="product-name">Starter</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Cocok untuk pemula yang ingin mencoba platform</p>
+                    <div class="product-price">Rp 100.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Kapasitas dasar</li>
+                        <li><i class="fas fa-check"></i> Reward harian stabil</li>
+                        <li><i class="fas fa-check"></i> Dukungan standar</li>
+                        <li><i class="fas fa-check"></i> Dashboard monitoring</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-secondary" style="width: 100%;">Lihat Produk</a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 class="product-name">Pro</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Solusi optimal untuk pengguna aktif</p>
+                    <div class="product-price">Rp 500.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Semua fitur Starter</li>
+                        <li><i class="fas fa-check"></i> Kapasitas 5x lebih besar</li>
+                        <li><i class="fas fa-check"></i> Reward 40% lebih tinggi</li>
+                        <li><i class="fas fa-check"></i> Dukungan prioritas</li>
+                        <li><i class="fas fa-check"></i> Laporan detail</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-primary" style="width: 100%;">Lihat Produk</a>
+                </div>
+                <div class="product-item">
+                    <div class="product-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="product-name">Enterprise</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Untuk kebutuhan bisnis skala besar</p>
+                    <div class="product-price">Rp 2.500.000</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Semua fitur Pro</li>
+                        <li><i class="fas fa-check"></i> Kapasitas maksimal</li>
+                        <li><i class="fas fa-check"></i> Reward 80% lebih tinggi</li>
+                        <li><i class="fas fa-check"></i> Dukungan 24/7</li>
+                        <li><i class="fas fa-check"></i> Custom dashboard</li>
+                        <li><i class="fas fa-check"></i> Konsultasi khusus</li>
+                    </ul>
+                    <a href="login.html" class="btn btn-secondary" style="width: 100%;">Lihat Produk</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral Section -->
+        <div class="referral-section" id="referral">
+            <h2 class="referral-title">Program Referral Menguntungkan</h2>
+            <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">
+                Ajak teman dan dapatkan komisi tambahan dari setiap aktivitas mereka di platform FINDERTECH.
+            </p>
+            <ul class="referral-benefits">
+                <li><i class="fas fa-percentage"></i> Komisi hingga 15% dari aktivitas referral</li>
+                <li><i class="fas fa-calendar-check"></i> Bonus tambahan setiap periode</li>
+                <li><i class="fas fa-trophy"></i> Reward eksklusif untuk top referrer</li>
+                <li><i class="fas fa-chart-pie"></i> Dashboard monitoring referral real-time</li>
+            </ul>
+            <p style="color: rgba(255, 255, 255, 0.9); margin: 20px 0;">
+                Salin link referral Anda dari dashboard dan mulai dapatkan penghasilan tambahan sekarang.
+            </p>
+            <a href="daftar.html" class="btn btn-primary">
+                <i class="fas fa-users"></i>
+                Mulai Dapatkan Komisi
+            </a>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <h2 class="cta-title">Siap Bergabung dengan FINDERTECH?</h2>
+            <p class="cta-description">
+                Bergabunglah dengan ribuan pengguna yang telah merasakan manfaat infrastruktur digital dengan reward harian stabil.
+            </p>
+            <div class="cta-buttons">
+                <a href="daftar.html" class="btn btn-primary btn-lg">
+                    <i class="fas fa-user-plus"></i>
+                    Daftar Sekarang
+                </a>
+                <a href="login.html" class="btn btn-secondary btn-lg">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Masuk Akun
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-logo">
+                <i class="fas fa-search"></i>
+                FINDERTECH
+            </div>
+            <p class="footer-description">
+                Platform infrastruktur digital terdepan dengan sistem reward harian yang stabil dan transparan.
+            </p>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h3>Platform</h3>
+                    <ul>
+                        <li><a href="#">Beranda</a></li>
+                        <li><a href="#produk">Produk</a></li>
+                        <li><a href="#cara-kerja">Cara Kerja</a></li>
+                        <li><a href="#referral">Referral</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Akun</h3>
+                    <ul>
+                        <li><a href="login.html">Masuk</a></li>
+                        <li><a href="daftar.html">Daftar</a></li>
+                        <li><a href="login.html">Dashboard</a></li>
+                        <li><a href="login.html">Produk Saya</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#" class="modal-trigger" data-modal="terms">Aturan & Ketentuan</a></li>
+                        <li><a href="#" class="modal-trigger" data-modal="privacy">Kebijakan Privasi</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Kontak</h3>
+                    <ul>
+                        <li><a href="#">Email</a></li>
+                        <li><a href="#">WhatsApp</a></li>
+                        <li><a href="#">Telegram</a></li>
+                        <li><a href="#">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="legal-links">
+                <a href="#" class="modal-trigger" data-modal="terms">Aturan & Ketentuan</a>
+                <a href="#" class="modal-trigger" data-modal="privacy">Kebijakan Privasi</a>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 FINDERTECH. Semua hak dilindungi.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal" id="termsModal">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <h2>Aturan & Ketentuan</h2>
+            
+            <h3>1. Penerimaan Syarat</h3>
+            <p>Dengan mengakses dan menggunakan platform FINDERTECH, Anda setuju untuk terikat oleh aturan dan ketentuan berikut. Jika Anda tidak setuju dengan salah satu ketentuan ini, Anda tidak diperbolehkan menggunakan platform ini.</p>
+            
+            <h3>2. Deskripsi Layanan</h3>
+            <p>FINDERTECH menyediakan platform infrastruktur digital yang memungkinkan pengguna untuk mengakses berbagai produk dan layanan digital. Platform ini juga menyediakan sistem reward harian berdasarkan penggunaan layanan.</p>
+            
+            <h3>3. Pendaftaran Akun</h3>
+            <p>Untuk menggunakan layanan kami, Anda harus mendaftar akun dengan informasi yang akurat, lengkap, dan terkini. Anda bertanggung jawab untuk menjaga kerahasiaan informasi akun Anda dan semua aktivitas yang terjadi di bawah akun Anda.</p>
+            
+            <h3>4. Penggunaan Platform</h3>
+            <p>Anda setuju untuk menggunakan platform FINDERTECH hanya untuk tujuan yang sah dan sesuai dengan aturan yang berlaku.</p>
+            
+            <h3>5. Reward dan Pembayaran</h3>
+            <p>Reward harian dihitung berdasarkan penggunaan produk yang aktif. FINDERTECH berhak untuk menyesuaikan sistem reward sesuai dengan kebijakan platform.</p>
+            
+            <h3>6. Perubahan Ketentuan</h3>
+            <p>Kami berhak untuk mengubah aturan dan ketentuan ini kapan saja. Perubahan akan berlaku segera setelah diposting di platform.</p>
+        </div>
+    </div>
+    
+    <div class="modal" id="privacyModal">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">&times;</button>
+            <h2>Kebijakan Privasi</h2>
+            
+            <h3>1. Pengumpulan Informasi</h3>
+            <p>Kami mengumpulkan informasi yang Anda berikan langsung saat mendaftar, menggunakan layanan, atau berkomunikasi dengan kami.</p>
+            
+            <h3>2. Penggunaan Informasi</h3>
+            <p>Informasi yang kami kumpulkan digunakan untuk menyediakan, mengoperasikan, dan memelihara layanan kami.</p>
+            
+            <h3>3. Perlindungan Data</h3>
+            <p>Kami menerapkan langkah-langkah keamanan teknis dan organisasi yang sesuai untuk melindungi informasi pribadi Anda.</p>
+            
+            <h3>4. Penyimpanan Data</h3>
+            <p>Kami menyimpan informasi pribadi Anda hanya selama diperlukan untuk tujuan yang diuraikan dalam kebijakan privasi ini.</p>
+            
+            <h3>5. Hak Pengguna</h3>
+            <p>Anda memiliki hak untuk mengakses, memperbaiki, atau menghapus informasi pribadi Anda.</p>
+            
+            <h3>6. Kontak</h3>
+            <p>Jika Anda memiliki pertanyaan tentang kebijakan privasi ini, silakan hubungi kami melalui informasi kontak yang tersedia di platform.</p>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+            document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+        });
+        
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-link, .nav-cta a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Modal functionality
+        const modalTriggers = document.querySelectorAll('.modal-trigger');
+        const modals = document.querySelectorAll('.modal');
+        const closeButtons = document.querySelectorAll('.modal-close');
+        
+        modalTriggers.forEach(trigger => {
+            trigger.addEventListener('click', (e) => {
+                e.preventDefault();
+                const modalId = trigger.getAttribute('data-modal') + 'Modal';
+                const modal = document.getElementById(modalId);
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+        
+        closeButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal');
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Close modal when clicking outside content
+        modals.forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                modals.forEach(modal => {
+                    if (modal.classList.contains('active')) {
+                        modal.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        });
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                e.preventDefault();
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    const headerHeight = document.querySelector('.top-nav').offsetHeight;
+                    const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Stats counter animation
+        function animateCounter(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value + (element.id === 'statUptime' ? '%' : '+');
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Initialize stats animation
+        document.addEventListener('DOMContentLoaded', () => {
+            const stats = {
+                statUsers: 12500,
+                statProducts: 42,
+                statRewards: 8925000,
+                statUptime: 99.9
+            };
+            
+            Object.keys(stats).forEach(statId => {
+                const element = document.getElementById(statId);
+                if (element) {
+                    const targetValue = stats[statId];
+                    animateCounter(element, 0, targetValue, 2000);
+                }
+            });
+            
+            // Add animation to cards on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.card').forEach(card => {
+                observer.observe(card);
+            });
+        });
+        
+        // Toast notification function
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+        
+        // Demo: Show welcome toast
+        setTimeout(() => {
+            showToast('Selamat datang di FINDERTECH! 🚀');
+        }, 1000);
+    </script>
+</body>
+</html>

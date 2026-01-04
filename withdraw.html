@@ -1,0 +1,1386 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw - FINDERTECH</title>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* RESET & BASE STYLES */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1E88E5;
+            --primary-dark: #0D47A1;
+            --secondary: #90CAF9;
+            --success: #2E7D32;
+            --error: #D32F2F;
+            --warning: #F9A825;
+            --white: #FFFFFF;
+            --gray-light: #F5F7FA;
+            --gray-border: #E0E0E0;
+            --gray-text: #616161;
+            --black: #212121;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            background: var(--gray-light);
+            color: var(--black);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.5;
+            position: relative;
+        }
+
+        /* ANIMATED BACKGROUND - COPY FROM dashboard.html */
+        .bg-animated {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(30, 136, 229, 0.03) 0%, rgba(13, 71, 161, 0.03) 100%);
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        .particle:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 5%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 60%;
+            left: 80%;
+            animation-delay: -5s;
+            background: var(--primary-dark);
+        }
+
+        .particle:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 80%;
+            left: 10%;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(4) {
+            width: 100px;
+            height: 100px;
+            top: 20%;
+            left: 70%;
+            animation-delay: -15s;
+            background: var(--secondary);
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            25% {
+                transform: translateY(-20px) rotate(90deg);
+            }
+            50% {
+                transform: translateY(0) rotate(180deg);
+            }
+            75% {
+                transform: translateY(20px) rotate(270deg);
+            }
+        }
+
+        /* PAGE LOAD ANIMATION */
+        .page-content {
+            animation: pageFadeIn 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes pageFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* TOP NAVIGATION */
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--gray-border);
+            z-index: 100;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            animation: navFadeDown 0.5s ease-out 0.2s forwards;
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        @keyframes navFadeDown {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-left, .nav-right {
+            width: 40px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-center {
+            flex: 1;
+            text-align: center;
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .brand i {
+            font-size: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .back-btn:hover {
+            background: rgba(30, 136, 229, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        /* MAIN CONTENT */
+        .main-content {
+            padding: 80px 16px 40px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: var(--transition);
+            animation: cardSlideUp 0.6s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        @keyframes cardSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-1 {
+            animation-delay: 0.3s;
+        }
+
+        .card-2 {
+            animation-delay: 0.4s;
+        }
+
+        .card-3 {
+            animation-delay: 0.5s;
+        }
+
+        /* SALDO CARD */
+        .saldo-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .saldo-label {
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        .saldo-icon {
+            font-size: 24px;
+            color: var(--primary);
+        }
+
+        .saldo-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 24px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* INPUT GROUP */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--black);
+            margin-bottom: 8px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 16px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 16px 16px 16px 48px;
+            border: 2px solid var(--gray-border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--black);
+            background: var(--white);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        .input-field::placeholder {
+            color: #BDBDBD;
+        }
+
+        /* BANK SELECTION */
+        .bank-selection {
+            margin-bottom: 20px;
+        }
+
+        .bank-select {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--gray-border);
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--black);
+            background: var(--white);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+        }
+
+        .bank-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.1);
+        }
+
+        .add-bank-btn {
+            width: 100%;
+            padding: 16px;
+            border: 2px dashed var(--gray-border);
+            border-radius: var(--radius);
+            background: var(--gray-light);
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .add-bank-btn:hover {
+            background: rgba(30, 136, 229, 0.05);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .add-bank-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* BUTTON STYLES */
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(30, 136, 229, 0.3);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        .btn-primary:disabled {
+            background: #BDBDBD;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-loading {
+            position: relative;
+            color: transparent;
+        }
+
+        .btn-loading:after {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* INFO CARD */
+        .info-card {
+            background: var(--gray-light);
+            border-left: 4px solid var(--primary);
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 4px;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: var(--gray-text);
+            line-height: 1.4;
+        }
+
+        /* MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 400px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 4px;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            background: var(--gray-light);
+            color: var(--black);
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            border-top: 1px solid var(--gray-border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-btn-primary {
+            background: var(--primary);
+            color: var(--white);
+        }
+
+        .modal-btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .modal-btn-secondary {
+            background: var(--gray-light);
+            color: var(--black);
+            border: 1px solid var(--gray-border);
+        }
+
+        .modal-btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        /* TOAST NOTIFICATION */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: var(--black);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.warning {
+            background: var(--warning);
+            color: var(--black);
+        }
+
+        /* LOADING STATES */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 4px;
+        }
+
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton-text {
+            height: 16px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-text.short {
+            width: 60%;
+        }
+
+        .skeleton-amount {
+            height: 40px;
+            width: 70%;
+            margin: 20px auto;
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 768px) {
+            .main-content {
+                max-width: 600px;
+                padding: 90px 24px 60px;
+            }
+            
+            .card {
+                padding: 24px;
+            }
+            
+            .saldo-amount {
+                font-size: 36px;
+            }
+        }
+
+        /* UTILITY CLASSES */
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animated">
+        <div class="bg-gradient"></div>
+        <div class="particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+    </div>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button class="back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+        </div>
+        <div class="nav-center">
+            <div class="page-title">Withdraw</div>
+        </div>
+        <div class="nav-right"></div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content page-content">
+        <!-- Card 1: Saldo Info -->
+        <div class="card card-1">
+            <div class="saldo-header">
+                <div class="saldo-label">Saldo Tersedia</div>
+                <div class="saldo-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+            </div>
+            
+            <div class="saldo-amount" id="saldoAmount">Rp 0</div>
+            
+            <!-- Bank Selection -->
+            <div class="bank-selection">
+                <label class="input-label">Pilih Rekening</label>
+                <select class="bank-select" id="bankSelect">
+                    <option value="" disabled selected>Pilih rekening bank</option>
+                </select>
+                
+                <button class="add-bank-btn" id="addBankBtn">
+                    <i class="fas fa-plus-circle"></i>
+                    Tambah Rekening
+                </button>
+            </div>
+            
+            <!-- Withdraw Amount Input -->
+            <div class="input-group">
+                <label class="input-label">Nominal Withdraw</label>
+                <div class="input-wrapper">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <input 
+                        type="number" 
+                        class="input-field" 
+                        id="withdrawAmount" 
+                        placeholder="50000"
+                        min="50000"
+                        step="1000"
+                    >
+                </div>
+            </div>
+            
+            <!-- Submit Button -->
+            <button class="btn btn-primary" id="submitBtn" disabled>
+                AJUKAN WITHDRAW
+            </button>
+        </div>
+        
+        <!-- Card 2: Info Card (Will be shown on submit) -->
+        <div class="info-card hidden" id="infoCard">
+            <div class="info-title" id="infoTitle">Informasi</div>
+            <div class="info-text" id="infoText"></div>
+        </div>
+        
+        <!-- Card 3: Requirements Info -->
+        <div class="card card-3">
+            <div class="info-title" style="margin-bottom: 12px;">Ketentuan Withdraw</div>
+            <div class="info-text">
+                <p style="margin-bottom: 8px;">• Minimal withdraw Rp 50.000</p>
+                <p style="margin-bottom: 8px;">• Saldo harus mencukupi</p>
+                <p style="margin-bottom: 8px;">• Hanya untuk rekening atas nama sendiri</p>
+                <p>• Proses akan ditinjau oleh sistem dalam 1x24 jam</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bank Modal -->
+    <div class="modal-overlay" id="bankModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">Tambah Rekening</div>
+                <button class="modal-close" id="closeBankModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="input-group">
+                    <label class="input-label">Nama Pemilik Rekening</label>
+                    <input type="text" class="input-field" id="accountName" placeholder="Nama lengkap sesuai rekening">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Nomor Rekening / E-Wallet</label>
+                    <input type="text" class="input-field" id="accountNumber" placeholder="Contoh: 1234567890">
+                </div>
+                
+                <div class="input-group">
+                    <label class="input-label">Bank / E-Wallet</label>
+                    <select class="bank-select" id="bankName">
+                        <option value="" disabled selected>Pilih bank</option>
+                        <option value="BCA">BCA</option>
+                        <option value="BNI">BNI</option>
+                        <option value="BRI">BRI</option>
+                        <option value="Mandiri">Mandiri</option>
+                        <option value="CIMB">CIMB Niaga</option>
+                        <option value="Dana">Dana</option>
+                        <option value="OVO">OVO</option>
+                        <option value="Gopay">GoPay</option>
+                        <option value="ShopeePay">ShopeePay</option>
+                        <option value="other">Lainnya</option>
+                    </select>
+                    
+                    <input type="text" class="input-field hidden" id="otherBankName" placeholder="Nama Bank Lainnya" style="margin-top: 12px;">
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" id="cancelBankBtn">
+                    BATAL
+                </button>
+                <button class="modal-btn modal-btn-primary" id="saveBankBtn">
+                    SIMPAN
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+<!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            getDoc, 
+            collection, 
+            addDoc, 
+            query, 
+            where, 
+            getDocs,
+            onSnapshot,
+            serverTimestamp,
+            updateDoc,
+            increment,
+            runTransaction
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB4EV4ywK6YZZgyBXVWSdic6l9tpzzzHpk",
+            authDomain: "findertech.firebaseapp.com",
+            projectId: "findertech",
+            storageBucket: "findertech.firebasestorage.app",
+            messagingSenderId: "510956153810",
+            appId: "1:510956153810:web:0aac2328ee61355569f60b"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // DOM Elements
+        const backBtn = document.getElementById('backBtn');
+        const saldoAmountEl = document.getElementById('saldoAmount');
+        const bankSelect = document.getElementById('bankSelect');
+        const addBankBtn = document.getElementById('addBankBtn');
+        const withdrawAmountInput = document.getElementById('withdrawAmount');
+        const submitBtn = document.getElementById('submitBtn');
+        const infoCard = document.getElementById('infoCard');
+        const infoTitle = document.getElementById('infoTitle');
+        const infoText = document.getElementById('infoText');
+        const toastEl = document.getElementById('toast');
+        
+        // Modal Elements
+        const bankModal = document.getElementById('bankModal');
+        const closeBankModal = document.getElementById('closeBankModal');
+        const cancelBankBtn = document.getElementById('cancelBankBtn');
+        const saveBankBtn = document.getElementById('saveBankBtn');
+        const accountNameInput = document.getElementById('accountName');
+        const accountNumberInput = document.getElementById('accountNumber');
+        const bankNameSelect = document.getElementById('bankName');
+        const otherBankNameInput = document.getElementById('otherBankName');
+
+        // Global Variables
+        let currentUser = null;
+        let userData = null;
+        let currentBalance = 0;
+        let banks = [];
+        let hasDeposit = false;
+        let pendingWithdraw = false;
+
+        // Toast Notification Function
+        function showToast(message, type = 'default', duration = 3000) {
+            toastEl.textContent = message;
+            toastEl.className = 'toast';
+            
+            if (type !== 'default') {
+                toastEl.classList.add(type);
+            }
+            
+            toastEl.classList.add('show');
+            
+            setTimeout(() => {
+                toastEl.classList.remove('show', 'error', 'success', 'warning');
+            }, duration);
+        }
+
+        // Format Currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Update Saldo Display
+        function updateSaldoDisplay(balance) {
+            currentBalance = balance;
+            saldoAmountEl.textContent = formatCurrency(balance);
+        }
+
+        // Load User Data
+        async function loadUserData(uid) {
+            try {
+                const userDoc = await getDoc(doc(db, 'users', uid));
+                
+                if (userDoc.exists()) {
+                    userData = userDoc.data();
+                    currentBalance = userData.saldo || 0;
+                    
+                    // Update UI with user data
+                    updateSaldoDisplay(currentBalance);
+                    
+                    // Load banks
+                    loadBanks(uid);
+                    
+                    // Check deposit history
+                    checkDepositHistory(uid);
+                    
+                    // Check for pending withdraw
+                    checkPendingWithdraw(uid);
+                } else {
+                    console.error('User document not found');
+                    showToast('Data pengguna tidak ditemukan', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+                showToast('Gagal memuat data pengguna', 'error');
+            }
+        }
+
+        // Check Pending Withdraw
+        async function checkPendingWithdraw(uid) {
+            try {
+                const withdrawQuery = query(
+                    collection(db, 'withdraws'),
+                    where('uid', '==', uid),
+                    where('status', '==', 'pending')
+                );
+                
+                const snapshot = await getDocs(withdrawQuery);
+                pendingWithdraw = !snapshot.empty;
+                
+                if (pendingWithdraw) {
+                    showToast('Anda memiliki withdraw pending. Tunggu konfirmasi admin.', 'warning', 5000);
+                    disableForm();
+                } else {
+                    enableForm();
+                }
+                
+                validateForm();
+            } catch (error) {
+                console.error('Error checking pending withdraw:', error);
+                pendingWithdraw = false;
+            }
+        }
+
+        // Check Deposit History
+        async function checkDepositHistory(uid) {
+            try {
+                const depositsQuery = query(
+                    collection(db, 'deposits'),
+                    where('uid', '==', uid),
+                    where('status', '==', 'success')
+                );
+                
+                const snapshot = await getDocs(depositsQuery);
+                hasDeposit = !snapshot.empty;
+                
+                // Update submit button state
+                validateForm();
+            } catch (error) {
+                console.error('Error checking deposit history:', error);
+                hasDeposit = false;
+            }
+        }
+
+        // Load Banks
+        async function loadBanks(uid) {
+            try {
+                const banksQuery = query(
+                    collection(db, 'users', uid, 'banks'),
+                    where('uid', '==', uid)
+                );
+                
+                onSnapshot(banksQuery, (snapshot) => {
+                    banks = [];
+                    bankSelect.innerHTML = '<option value="" disabled selected>Pilih rekening bank</option>';
+                    
+                    if (snapshot.empty) {
+                        // No banks, show add button and disable form
+                        submitBtn.disabled = true;
+                        infoCard.classList.add('hidden');
+                        return;
+                    }
+                    
+                    snapshot.forEach((doc) => {
+                        const bankData = doc.data();
+                        bankData.id = doc.id;
+                        banks.push(bankData);
+                        
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.textContent = `${bankData.bankName} - ${bankData.accountNumber} (${bankData.accountName})`;
+                        bankSelect.appendChild(option);
+                    });
+                    
+                    // Enable form if we have banks
+                    validateForm();
+                    
+                }, (error) => {
+                    console.error('Error loading banks:', error);
+                    showToast('Gagal memuat data rekening', 'error');
+                });
+                
+            } catch (error) {
+                console.error('Error setting up banks listener:', error);
+            }
+        }
+
+        // Disable Form
+        function disableForm() {
+            withdrawAmountInput.disabled = true;
+            bankSelect.disabled = true;
+            submitBtn.disabled = true;
+            
+            // Show info about pending withdraw
+            infoTitle.textContent = 'Withdraw Pending';
+            infoText.textContent = 'Anda memiliki withdraw yang sedang menunggu konfirmasi admin. Harap tunggu hingga proses selesai.';
+            infoCard.classList.remove('hidden');
+        }
+
+        // Enable Form
+        function enableForm() {
+            withdrawAmountInput.disabled = false;
+            bankSelect.disabled = false;
+            validateForm();
+        }
+
+        // Validate Form
+        function validateForm() {
+            const amount = parseInt(withdrawAmountInput.value) || 0;
+            const selectedBank = bankSelect.value;
+            const minAmount = 50000;
+            
+            // Hide info card initially
+            infoCard.classList.add('hidden');
+            
+            // Check for pending withdraw
+            if (pendingWithdraw) {
+                disableForm();
+                return;
+            }
+            
+            // Check if user has banks
+            if (banks.length === 0) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'TAMBAH REKENING TERLEBIH DAHULU';
+                showValidationInfo();
+                return;
+            }
+            
+            // Check if bank is selected
+            if (!selectedBank) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'PILIH REKENING';
+                return;
+            }
+            
+            // Check minimum amount
+            if (amount < minAmount) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = `MINIMAL ${formatCurrency(minAmount)}`;
+                showValidationInfo();
+                return;
+            }
+            
+            // Check if balance is sufficient
+            if (amount > currentBalance) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'SALDO TIDAK CUKUP';
+                showValidationInfo();
+                return;
+            }
+            
+            // Check if user has made deposit
+            if (!hasDeposit) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'BELUM PERNAH DEPOSIT';
+                showValidationInfo();
+                return;
+            }
+            
+            // All validations passed
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'AJUKAN WITHDRAW';
+        }
+
+        // Show Validation Info
+        function showValidationInfo() {
+            const amount = parseInt(withdrawAmountInput.value) || 0;
+            
+            // Clear previous info
+            infoCard.classList.add('hidden');
+            
+            // Show appropriate info based on conditions
+            if (currentBalance < 50000) {
+                infoTitle.textContent = 'Minimal Withdraw';
+                infoText.textContent = 'Saldo Anda tidak mencukupi untuk melakukan withdraw. Minimal withdraw adalah Rp 50.000.';
+                infoCard.classList.remove('hidden');
+            } else if (!hasDeposit) {
+                infoTitle.textContent = 'Belum Pernah Deposit';
+                infoText.textContent = 'Anda harus melakukan deposit minimal sekali sebelum dapat melakukan withdraw. Silakan lakukan deposit terlebih dahulu.';
+                infoCard.classList.remove('hidden');
+            } else if (banks.length === 0) {
+                infoTitle.textContent = 'Tambah Rekening';
+                infoText.textContent = 'Silakan tambahkan data rekening terlebih dahulu. Klik tombol "Tambah Rekening" untuk mengisi data rekening Anda.';
+                infoCard.classList.remove('hidden');
+            } else if (amount < 50000) {
+                infoTitle.textContent = 'Minimal Withdraw';
+                infoText.textContent = 'Minimal nominal withdraw adalah Rp 50.000. Silakan masukkan nominal yang sesuai.';
+                infoCard.classList.remove('hidden');
+            } else if (amount > currentBalance) {
+                infoTitle.textContent = 'Saldo Tidak Cukup';
+                infoText.textContent = `Saldo Anda ${formatCurrency(currentBalance)} tidak mencukupi untuk withdraw ${formatCurrency(amount)}. Silakan kurangi nominal withdraw atau lakukan deposit.`;
+                infoCard.classList.remove('hidden');
+            } else {
+                // All validations passed, hide info card
+                infoCard.classList.add('hidden');
+            }
+        }
+
+          // Submit Withdraw Request - LOGIKA UTAMA
+        async function submitWithdrawRequest() {
+            const amount = parseInt(withdrawAmountInput.value);
+            const selectedBankId = bankSelect.value;
+            const selectedBank = banks.find(bank => bank.id === selectedBankId);
+            
+            if (!selectedBank) {
+                showToast('Pilih rekening terlebih dahulu', 'error');
+                return;
+            }
+            
+            // Validate again
+            if (amount < 50000) {
+                showToast(`Minimal withdraw ${formatCurrency(50000)}`, 'error');
+                return;
+            }
+            
+            if (amount > currentBalance) {
+                showToast('Saldo tidak mencukupi', 'error');
+                return;
+            }
+            
+            if (!hasDeposit) {
+                showToast('Anda harus melakukan deposit terlebih dahulu', 'error');
+                return;
+            }
+            
+            if (pendingWithdraw) {
+                showToast('Anda memiliki withdraw pending. Tunggu konfirmasi admin.', 'error');
+                return;
+            }
+            
+            // Show loading state
+            submitBtn.classList.add('btn-loading');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'MEMPROSES...';
+            
+            try {
+                // LOGIKA BARU: TIDAK kurangi saldo saat submit, hanya buat request
+                const withdrawData = {
+                    uid: currentUser.uid,
+                    amount: amount,
+                    bankId: selectedBankId,
+                    bankName: selectedBank.bankName,
+                    accountName: selectedBank.accountName,
+                    accountNumber: selectedBank.accountNumber,
+                    status: 'pending',
+                    createdAt: serverTimestamp(),
+                    // Tambahkan field untuk mengetahui saldo user saat request dibuat
+                    userBalanceAtRequest: currentBalance
+                };
+                
+                const withdrawsRef = collection(db, 'withdraws');
+                await addDoc(withdrawsRef, withdrawData);
+                
+                // Update state
+                pendingWithdraw = true;
+                
+                // Show success message (TIDAK KURANGI SALDO DI SINI)
+                showToast('Withdraw berhasil diajukan! Tunggu konfirmasi admin.', 'success');
+                
+                // Show info about pending
+                infoTitle.textContent = 'Withdraw Berhasil Diajukan';
+                infoText.textContent = `Withdraw sebesar ${formatCurrency(amount)} berhasil diajukan. Tunggu konfirmasi admin dalam 1x24 jam.`;
+                infoCard.classList.remove('hidden');
+                
+                // Reset form
+                withdrawAmountInput.value = '';
+                bankSelect.value = '';
+                
+                // Disable form while waiting for admin approval
+                disableForm();
+                
+            } catch (error) {
+                console.error('Error submitting withdraw:', error);
+                
+                if (error.message.includes('Saldo tidak mencukupi')) {
+                    showToast('Saldo tidak mencukupi', 'error');
+                } else {
+                    showToast('Gagal mengajukan withdraw: ' + error.message, 'error');
+                }
+                
+                // Re-validate form
+                validateForm();
+            } finally {
+                // Reset button state
+                submitBtn.classList.remove('btn-loading');
+                submitBtn.textContent = 'AJUKAN WITHDRAW';
+            }
+        }
+        // Save Bank Data
+        async function saveBankData() {
+            const accountName = accountNameInput.value.trim();
+            const accountNumber = accountNumberInput.value.trim();
+            let bankName = bankNameSelect.value;
+            
+            if (bankName === 'other') {
+                bankName = otherBankNameInput.value.trim();
+            }
+            
+            // Validate inputs
+            if (!accountName || !accountNumber || !bankName) {
+                showToast('Harap isi semua field', 'error');
+                return;
+            }
+            
+            // Show loading state
+            saveBankBtn.classList.add('btn-loading');
+            saveBankBtn.disabled = true;
+            
+            try {
+                const bankData = {
+                    uid: currentUser.uid,
+                    accountName: accountName,
+                    accountNumber: accountNumber,
+                    bankName: bankName,
+                    createdAt: serverTimestamp()
+                };
+                
+                await addDoc(collection(db, 'users', currentUser.uid, 'banks'), bankData);
+                
+                // Close modal and show success
+                closeBankModalFunc();
+                showToast('Rekening berhasil ditambahkan', 'success');
+                
+                // Reset form
+                accountNameInput.value = '';
+                accountNumberInput.value = '';
+                bankNameSelect.value = '';
+                otherBankNameInput.classList.add('hidden');
+                otherBankNameInput.value = '';
+                
+            } catch (error) {
+                console.error('Error saving bank data:', error);
+                showToast('Gagal menyimpan rekening', 'error');
+            } finally {
+                saveBankBtn.classList.remove('btn-loading');
+                saveBankBtn.disabled = false;
+            }
+        }
+
+        // Close Bank Modal
+        function closeBankModalFunc() {
+            bankModal.classList.remove('active');
+            accountNameInput.value = '';
+            accountNumberInput.value = '';
+            bankNameSelect.value = '';
+            otherBankNameInput.classList.add('hidden');
+            otherBankNameInput.value = '';
+        }
+
+        // Event Listeners
+        backBtn.addEventListener('click', () => {
+            window.location.href = 'dashboard.html';
+        });
+
+        withdrawAmountInput.addEventListener('input', validateForm);
+        withdrawAmountInput.addEventListener('blur', showValidationInfo);
+
+        submitBtn.addEventListener('click', () => {
+            showValidationInfo();
+            
+            // Only submit if all validations passed
+            if (!submitBtn.disabled) {
+                submitWithdrawRequest();
+            }
+        });
+
+        addBankBtn.addEventListener('click', () => {
+            bankModal.classList.add('active');
+        });
+
+        closeBankModal.addEventListener('click', closeBankModalFunc);
+        cancelBankBtn.addEventListener('click', closeBankModalFunc);
+
+        saveBankBtn.addEventListener('click', saveBankData);
+
+        bankNameSelect.addEventListener('change', () => {
+            if (bankNameSelect.value === 'other') {
+                otherBankNameInput.classList.remove('hidden');
+            } else {
+                otherBankNameInput.classList.add('hidden');
+            }
+        });
+
+        bankSelect.addEventListener('change', validateForm);
+
+        // Real-time balance listener
+        function setupBalanceListener(uid) {
+            const userRef = doc(db, 'users', uid);
+            
+            onSnapshot(userRef, (doc) => {
+                if (doc.exists()) {
+                    const data = doc.data();
+                    updateSaldoDisplay(data.saldo || 0);
+                    
+                    // Re-validate form when balance changes
+                    validateForm();
+                }
+            }, (error) => {
+                console.error('Error listening to balance:', error);
+            });
+        }
+
+        // Auth State Listener
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                loadUserData(user.uid);
+                setupBalanceListener(user.uid);
+            } else {
+                // User not logged in, redirect to login
+                window.location.href = 'login.html';
+            }
+        });
+
+    </script>
+</body>
+</html>
